@@ -7,7 +7,11 @@
 #include "BlasterCharacter.generated.h"
 
 class UCameraComponent;
+class UInputAction;
+class UInputMappingContext;
 class USpringArmComponent;
+
+struct FInputActionValue;
 
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter
@@ -22,6 +26,21 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputMappingContext> InputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> LookAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> JumpAction;
+
+	void Move(const FInputActionValue& InputActionValue);
+	void Look(const FInputActionValue& InputActionValue);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
