@@ -32,6 +32,8 @@ void ABlasterCharacter::BeginPlay()
 
 	// Add the input mapping context
 	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC) return;
+
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PC->GetLocalPlayer());
 	if (Subsystem)
 	{
