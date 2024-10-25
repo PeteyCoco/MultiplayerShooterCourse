@@ -9,6 +9,7 @@
 class AWeapon;
 
 class UCameraComponent;
+class UCombatComponent;
 class UInputAction;
 class UInputMappingContext;
 class USpringArmComponent;
@@ -29,6 +30,8 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
+	virtual void PostInitializeComponents() override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -44,8 +47,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> JumpAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> EquipAction;
+
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
+	void EquipButtonPressed(const FInputActionValue& InputActionValue);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
@@ -56,6 +63,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWidgetComponent> OverheadWidget;
+
+	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	TObjectPtr<UCombatComponent> Combat;
 
 	// The currently overlapped weapon
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)

@@ -60,4 +60,7 @@ private:
 	// A widget indicating that the weapon can be picked up
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UWidgetComponent> PickupWidget;
+
+public:
+	void SetWeaponState(EWeaponState State) { WeaponState = State; }
 };
