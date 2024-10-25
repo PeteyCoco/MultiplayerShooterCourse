@@ -35,6 +35,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;
 
@@ -49,10 +50,14 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> EquipAction;
+	//~ End Input section
 
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void EquipButtonPressed(const FInputActionValue& InputActionValue);
+
+	UFUNCTION(Server, Reliable)
+	void ServerEquipButtonPressed();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")

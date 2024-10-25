@@ -32,6 +32,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
 	// Show or hide the pickup widget
 	void ShowPickupWidget(bool bShowWidget);
 
@@ -54,13 +56,18 @@ private:
 	TObjectPtr<USphereComponent> AreaSphere;
 
 	// The current state of the weapon
-	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
+	UPROPERTY(ReplicatedUsing = OnRep_WeaponState, VisibleAnywhere, Category = "Weapon Properties")
 	EWeaponState WeaponState;
+
+	UFUNCTION()
+	void OnRep_WeaponState();
 
 	// A widget indicating that the weapon can be picked up
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UWidgetComponent> PickupWidget;
 
 public:
-	void SetWeaponState(EWeaponState State) { WeaponState = State; }
+	void SetWeaponState(EWeaponState State);
+
+	USphereComponent* GetAreaSphere() const { return AreaSphere; }
 };
