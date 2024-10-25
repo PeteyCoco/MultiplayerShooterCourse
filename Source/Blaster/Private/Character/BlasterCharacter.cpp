@@ -9,6 +9,8 @@
 #include "EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
+#include "Weapon/Weapon.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -30,6 +32,14 @@ ABlasterCharacter::ABlasterCharacter()
 	OverheadWidget->SetupAttachment(RootComponent);
 }
 
+void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	// Register replicated variables
+	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
+}
+
 void ABlasterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -44,6 +54,11 @@ void ABlasterCharacter::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 	
+}
+
+void ABlasterCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ABlasterCharacter::Move(const FInputActionValue& InputActionValue)
@@ -77,9 +92,37 @@ void ABlasterCharacter::Look(const FInputActionValue& InputActionValue)
 	}
 }
 
-void ABlasterCharacter::Tick(float DeltaTime)
+void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
-	Super::Tick(DeltaTime);
+	if (IsLocallyControlled()) // Only true on the server for the server's character
+	{
+		if (OverlappingWeapon)
+		{
+			OverlappingWeapon->ShowPickupWidget(false);
+		}
+	}
+	OverlappingWeapon = Weapon;
+
+	if (IsLocallyControlled()) 
+	{
+		if (OverlappingWeapon)
+		{
+			OverlappingWeapon->ShowPickupWidget(true);
+		}
+	}
+}
+
+void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
+{
+	// Remember that the server never receives a rep notify
+	if (LastWeapon)
+	{
+		LastWeapon->ShowPickupWidget(false);
+	}
+	if (OverlappingWeapon)
+	{
+		OverlappingWeapon->ShowPickupWidget(true);
+	}
 }
 
 void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

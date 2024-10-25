@@ -32,11 +32,18 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	// Show or hide the pickup widget
+	void ShowPickupWidget(bool bShowWidget);
+
 protected:
 	virtual void BeginPlay() override;
-
+	
+	//~ Begin overlap callbacks
 	UFUNCTION()
-	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void OnSphereBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	virtual void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	//~ End overlap callbacks
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
