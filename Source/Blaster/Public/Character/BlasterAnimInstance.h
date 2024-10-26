@@ -48,4 +48,13 @@ private:
 	// True if the character is crouched
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsAiming;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	float YawOffset;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	float Lean;
+
+	FRotator CharacterRotationLastFrame;
+	FRotator CharacterRotation;
 };
