@@ -34,6 +34,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	bUseControllerRotationYaw = false; // Character does not rotate with camera
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void ABlasterCharacter::PostInitializeComponents()
@@ -131,6 +133,11 @@ void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 	}
 }
 
+void ABlasterCharacter::CrouchButtonPressed(const FInputActionValue& InputActionValue)
+{
+	bIsCrouched ? UnCrouch() : Crouch();
+}
+
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
 	if (IsLocallyControlled()) // Only true on the server for the server's character
@@ -181,6 +188,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 
 	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Completed, this, &ABlasterCharacter::EquipButtonPressed);
+	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterCharacter::CrouchButtonPressed);
 
 }
 

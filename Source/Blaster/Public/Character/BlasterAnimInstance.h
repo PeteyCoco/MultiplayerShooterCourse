@@ -41,4 +41,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Wepon", meta = (AllowPrivateAccess = true))
 	bool bIsWeaponEquipped;
 
+	// True if the character is crouched
+	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = true))
+	bool bIsCrouched;
 };

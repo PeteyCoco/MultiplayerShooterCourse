@@ -50,11 +50,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> EquipAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> CrouchAction;
 	//~ End Input section
 
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void EquipButtonPressed(const FInputActionValue& InputActionValue);
+	void CrouchButtonPressed(const FInputActionValue& InputActionValue);
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
