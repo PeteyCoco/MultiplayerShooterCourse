@@ -82,4 +82,7 @@ private:
 public:
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
+
+	// Return true if a weapon is equipped
+	bool IsWeaponEquipped() const;
 };

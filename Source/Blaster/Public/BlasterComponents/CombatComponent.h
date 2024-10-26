@@ -19,17 +19,20 @@ public:
 
 	friend class ABlasterCharacter;
 
-//~ Begin UActorComponent interface
+	//~ Begin UActorComponent interface
 protected:
 	virtual void BeginPlay() override;
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-//~ End UActorComponent interface
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+	//~ End UActorComponent interface
 
 public:
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
 private:
 	TObjectPtr<ABlasterCharacter> Character;
+
+	UPROPERTY(Replicated)
 	TObjectPtr<AWeapon> EquippedWeapon;
 };

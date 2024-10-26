@@ -24,7 +24,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	if (!BlasterCharacter) return;
 
 	/*
-	*	Collect movement data from the character
+	*	Collect data from the character
 	*/
 	FVector Velocity = BlasterCharacter->GetVelocity();
 	Velocity.Z = 0.f;
@@ -34,4 +34,6 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 	const float AccelerationMagnitude = BlasterCharacter->GetCharacterMovement()->GetCurrentAcceleration().Size();
 	bIsAccelerating = !FMath::IsNearlyZero(AccelerationMagnitude);
+
+	bIsWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 }
