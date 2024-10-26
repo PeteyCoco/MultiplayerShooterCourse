@@ -37,4 +37,5 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 
 	bIsWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 	bIsCrouched = BlasterCharacter->bIsCrouched;
+	bIsAiming = BlasterCharacter->IsAiming();
 }

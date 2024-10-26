@@ -30,6 +30,7 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
+	DOREPLIFETIME(UCombatComponent, bIsAiming)
 }
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
@@ -44,5 +45,16 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 		HandSocket->AttachActor(EquippedWeapon, Character->GetMesh());
 	}
 	EquippedWeapon->SetOwner(Character);
+}
+
+void UCombatComponent::SetAiming(bool bInIsAiming)
+{
+	bIsAiming = bInIsAiming; // So that client sees immediate response to action
+	ServerSetAiming(bIsAiming);
+}
+
+void UCombatComponent::ServerSetAiming_Implementation(bool bInIsAiming)
+{
+	bIsAiming = bInIsAiming;
 }
 

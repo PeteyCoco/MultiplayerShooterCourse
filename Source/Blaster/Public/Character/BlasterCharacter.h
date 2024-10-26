@@ -53,12 +53,17 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> CrouchAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> AimAction;
 	//~ End Input section
 
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void EquipButtonPressed(const FInputActionValue& InputActionValue);
 	void CrouchButtonPressed(const FInputActionValue& InputActionValue);
+	void AimButtonPressed(const FInputActionValue& InputActionValue);
+	void AimButtonReleased(const FInputActionValue& InputActionValue);
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
@@ -89,4 +94,7 @@ public:
 
 	// Return true if a weapon is equipped
 	bool IsWeaponEquipped() const;
+
+	// Return true if the character is aiming
+	bool IsAiming() const;
 };

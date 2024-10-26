@@ -26,22 +26,26 @@ private:
 	class ABlasterCharacter* BlasterCharacter;
 
 	// The movement speed
-	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float Speed;
 
 	// True if the character is in the air
-	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsInAir;
 
 	// True if the character is accelerating
-	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsAccelerating;
 
 	// True if the character has a weapon equipped
-	UPROPERTY(BlueprintReadOnly, Category = "Wepon", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsWeaponEquipped;
 
 	// True if the character is crouched
-	UPROPERTY(BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsCrouched;
+
+	// True if the character is crouched
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	bool bIsAiming;
 };

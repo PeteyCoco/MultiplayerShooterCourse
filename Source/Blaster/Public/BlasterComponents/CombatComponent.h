@@ -30,9 +30,17 @@ public:
 public:
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
+protected:
+	void SetAiming(bool bInIsAiming);
+	UFUNCTION(Server, Reliable)
+	void ServerSetAiming(bool bInIsAiming);
+
 private:
 	TObjectPtr<ABlasterCharacter> Character;
 
 	UPROPERTY(Replicated)
 	TObjectPtr<AWeapon> EquippedWeapon;
+
+	UPROPERTY(Replicated)
+	bool bIsAiming;
 };
