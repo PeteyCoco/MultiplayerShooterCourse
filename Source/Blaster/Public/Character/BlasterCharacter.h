@@ -36,6 +36,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	//~ Begin ACharacter interface
+	virtual void Jump() override;
+	//~ End ACharacter interface
+
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;

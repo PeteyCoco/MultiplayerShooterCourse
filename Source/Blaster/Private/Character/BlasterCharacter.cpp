@@ -34,15 +34,16 @@ ABlasterCharacter::ABlasterCharacter()
 	Combat = CreateDefaultSubobject<UCombatComponent>("CombatComponent");
 	Combat->SetIsReplicated(true);
 
+	// Character Movement properties
 	bUseControllerRotationYaw = false; // Character does not rotate with camera
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 850.f, 0.f);
+	TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
 
+	// Collision properties
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
-
-	TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
 
 	// Net properties
 	NetUpdateFrequency = 66.f;
@@ -81,6 +82,18 @@ void ABlasterCharacter::BeginPlay()
 		Subsystem->AddMappingContext(InputMappingContext, 0);
 	}
 	
+}
+
+void ABlasterCharacter::Jump()
+{
+	if (bIsCrouched)
+	{
+		UnCrouch();
+	}
+	else
+	{
+		Super::Jump();
+	}
 }
 
 void ABlasterCharacter::Tick(float DeltaTime)
@@ -293,7 +306,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABlasterCharacter::Look);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ABlasterCharacter::Jump);
 
 	EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Completed, this, &ABlasterCharacter::EquipButtonPressed);
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterCharacter::CrouchButtonPressed);
