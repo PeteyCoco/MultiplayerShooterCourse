@@ -34,7 +34,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	bIsInAir = BlasterCharacter->GetCharacterMovement()->IsFalling();
 
 	const float AccelerationMagnitude = BlasterCharacter->GetCharacterMovement()->GetCurrentAcceleration().Size();
-	bIsAccelerating = !FMath::IsNearlyZero(AccelerationMagnitude, 1.0E-4);
+	bIsAccelerating = !FMath::IsNearlyZero(AccelerationMagnitude);
 
 	bIsWeaponEquipped = BlasterCharacter->IsWeaponEquipped();
 	bIsCrouched = BlasterCharacter->bIsCrouched;
@@ -52,4 +52,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	const float Target = Delta.Yaw / DeltaTime;
 	const float Interp = FMath::FInterpTo(Lean, Target, DeltaTime, 6.f);
 	Lean = FMath::Clamp(Interp, -90.f, 90.f);
+
+	// Aim offsets
+	AO_Yaw = BlasterCharacter->GetAO_Yaw();
+	AO_Pitch = BlasterCharacter->GetAO_Pitch();
 }

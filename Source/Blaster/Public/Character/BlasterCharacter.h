@@ -56,14 +56,18 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> AimAction;
-	//~ End Input section
-
+	 
+	// Input callback functions
 	void Move(const FInputActionValue& InputActionValue);
 	void Look(const FInputActionValue& InputActionValue);
 	void EquipButtonPressed(const FInputActionValue& InputActionValue);
 	void CrouchButtonPressed(const FInputActionValue& InputActionValue);
 	void AimButtonPressed(const FInputActionValue& InputActionValue);
 	void AimButtonReleased(const FInputActionValue& InputActionValue);
+	//~ End Input section
+
+	// Updates the aim offset each frame
+	void AimOffset(float DeltaTime);
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
@@ -88,6 +92,11 @@ private:
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
+	// Aim offsets
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartingAimRotation;
+
 public:
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -97,4 +106,10 @@ public:
 
 	// Return true if the character is aiming
 	bool IsAiming() const;
+
+	// Return the yaw aim offset
+	float GetAO_Yaw() const;
+
+	// Return the pitch aim offset
+	float GetAO_Pitch() const;
 };

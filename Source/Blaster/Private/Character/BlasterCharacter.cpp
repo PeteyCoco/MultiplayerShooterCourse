@@ -11,6 +11,7 @@
 #include "EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "Weapon/Weapon.h"
 
@@ -79,6 +80,8 @@ void ABlasterCharacter::BeginPlay()
 void ABlasterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AimOffset(DeltaTime);
 }
 
 void ABlasterCharacter::Move(const FInputActionValue& InputActionValue)
@@ -158,6 +161,36 @@ void ABlasterCharacter::AimButtonReleased(const FInputActionValue& InputActionVa
 	}
 }
 
+void ABlasterCharacter::AimOffset(float DeltaTime)
+{
+	if (Combat->EquippedWeapon == nullptr) return;
+
+	// Calculate properties
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0.f;
+	const float Speed = Velocity.Length();
+	const bool bIsInAir = GetCharacterMovement()->IsFalling();
+
+	if (FMath::IsNearlyZero(Speed) && !bIsInAir) // Standing still and not jumping
+	{
+		bUseControllerRotationYaw = false;
+
+		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
+		AO_Yaw = DeltaAimRotation.Yaw;
+	}
+	else // running or jumping
+	{
+		bUseControllerRotationYaw = true;
+
+		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		AO_Yaw = 0.f;
+	}
+
+	// Pitch is always updated
+	AO_Pitch = GetBaseAimRotation().Pitch;
+}
+
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
 	if (IsLocallyControlled()) // Only true on the server for the server's character
@@ -186,6 +219,16 @@ bool ABlasterCharacter::IsWeaponEquipped() const
 bool ABlasterCharacter::IsAiming() const
 {
 	return (Combat && Combat->bIsAiming);
+}
+
+float ABlasterCharacter::GetAO_Yaw() const
+{
+	return AO_Yaw;
+}
+
+float ABlasterCharacter::GetAO_Pitch() const
+{
+	return AO_Pitch;
 }
 
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)

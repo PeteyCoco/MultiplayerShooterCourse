@@ -49,11 +49,20 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsAiming;
 
+	// Difference in degrees between the character and camera yaw
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float YawOffset;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float Lean;
+
+	// Aim offset for yaw
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	float AO_Yaw;
+
+	// Aim offset for pitch
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	float AO_Pitch;
 
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation;
