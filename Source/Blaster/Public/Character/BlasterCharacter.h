@@ -112,4 +112,7 @@ public:
 
 	// Return the pitch aim offset
 	float GetAO_Pitch() const;
+
+	// Return the equipped weapon
+	TObjectPtr<AWeapon> GetEquippedWeapon() const;
 };

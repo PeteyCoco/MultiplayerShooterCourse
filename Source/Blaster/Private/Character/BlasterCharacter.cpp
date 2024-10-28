@@ -238,6 +238,11 @@ float ABlasterCharacter::GetAO_Pitch() const
 	return AO_Pitch;
 }
 
+TObjectPtr<AWeapon> ABlasterCharacter::GetEquippedWeapon() const
+{
+	return Combat ? Combat->EquippedWeapon : nullptr;
+}
+
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	// Remember that the server never receives a rep notify

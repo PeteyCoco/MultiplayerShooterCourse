@@ -6,6 +6,8 @@
 #include "Animation/AnimInstance.h"
 #include "BlasterAnimInstance.generated.h"
 
+class AWeapon;
+
 /**
  * AnimInstance for the Blaster character
  */
@@ -41,6 +43,9 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsWeaponEquipped;
 
+
+	TObjectPtr<AWeapon> EquippedWeapon;
+
 	// True if the character is crouched
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsCrouched;
@@ -63,6 +68,9 @@ private:
 	// Aim offset for pitch
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float AO_Pitch;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	FTransform LeftHandTransform;
 
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation;
