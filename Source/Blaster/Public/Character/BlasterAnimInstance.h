@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "BlasterAnimInstance.generated.h"
 
 class AWeapon;
@@ -74,4 +75,7 @@ private:
 
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	ETurningInPlace TurningInPlaceState;
 };

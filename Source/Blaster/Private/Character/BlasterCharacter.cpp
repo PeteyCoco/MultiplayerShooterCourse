@@ -41,6 +41,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+
+	TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
 }
 
 void ABlasterCharacter::PostInitializeComponents()
@@ -82,6 +84,7 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AimOffset(DeltaTime);
+	TurnInPlace(DeltaTime);
 }
 
 void ABlasterCharacter::Move(const FInputActionValue& InputActionValue)
@@ -185,6 +188,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 
 		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		AO_Yaw = 0.f;
+		
 	}
 
 	// Pitch is always updated
@@ -195,6 +199,22 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 		const FVector2D InRange(270.f, 360.f);
 		const FVector2D OutRange(-90.f, 0.f);
 		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
+	}
+}
+
+void ABlasterCharacter::TurnInPlace(float DeltaTime)
+{
+	if (AO_Yaw > 90.f)
+	{
+		TurningInPlaceState = ETurningInPlace::ETIP_Right;
+	}
+	else if (AO_Yaw < -90.f)
+	{
+		TurningInPlaceState = ETurningInPlace::ETIP_Left;
+	}
+	else
+	{
+		TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
 	}
 }
 
@@ -226,16 +246,6 @@ bool ABlasterCharacter::IsWeaponEquipped() const
 bool ABlasterCharacter::IsAiming() const
 {
 	return (Combat && Combat->bIsAiming);
-}
-
-float ABlasterCharacter::GetAO_Yaw() const
-{
-	return AO_Yaw;
-}
-
-float ABlasterCharacter::GetAO_Pitch() const
-{
-	return AO_Pitch;
 }
 
 TObjectPtr<AWeapon> ABlasterCharacter::GetEquippedWeapon() const

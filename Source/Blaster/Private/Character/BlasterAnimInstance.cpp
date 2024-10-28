@@ -61,6 +61,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	AO_Yaw = BlasterCharacter->GetAO_Yaw();
 	AO_Pitch = BlasterCharacter->GetAO_Pitch();
 
+	TurningInPlaceState = BlasterCharacter->GetTurningInPlace();
+
 	// Get the left hand transform data
 	if (bIsWeaponEquipped && EquippedWeapon && EquippedWeapon->GetWeaponMesh() && BlasterCharacter->GetMesh())
 	{

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "BlasterCharacter.generated.h"
 
 class AWeapon;
@@ -66,8 +67,11 @@ protected:
 	void AimButtonReleased(const FInputActionValue& InputActionValue);
 	//~ End Input section
 
-	// Updates the aim offset each frame
+	// Update the aim offset for a frame
 	void AimOffset(float DeltaTime);
+
+	// Update the turn in place state for a frame
+	void TurnInPlace(float DeltaTime);
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
@@ -97,6 +101,8 @@ private:
 	float AO_Pitch;
 	FRotator StartingAimRotation;
 
+	ETurningInPlace TurningInPlaceState;
+
 public:
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -108,10 +114,13 @@ public:
 	bool IsAiming() const;
 
 	// Return the yaw aim offset
-	float GetAO_Yaw() const;
+	float GetAO_Yaw() const { return AO_Yaw; }
 
 	// Return the pitch aim offset
-	float GetAO_Pitch() const;
+	float GetAO_Pitch() const { return AO_Pitch; }
+
+	// Return the turning in place state
+	ETurningInPlace GetTurningInPlace() const { return TurningInPlaceState; }
 
 	// Return the equipped weapon
 	TObjectPtr<AWeapon> GetEquippedWeapon() const;
