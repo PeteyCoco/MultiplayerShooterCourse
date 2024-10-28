@@ -43,6 +43,10 @@ ABlasterCharacter::ABlasterCharacter()
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 
 	TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
+
+	// Net properties
+	NetUpdateFrequency = 66.f;
+	MinNetUpdateFrequency = 33.f;
 }
 
 void ABlasterCharacter::PostInitializeComponents()
