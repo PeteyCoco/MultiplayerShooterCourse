@@ -176,11 +176,15 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 
 	if (FMath::IsNearlyZero(Speed) && !bIsInAir) // Standing still and not jumping
 	{
-		bUseControllerRotationYaw = false;
+		bUseControllerRotationYaw = true;
 
 		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		FRotator DeltaAimRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
 		AO_Yaw = DeltaAimRotation.Yaw;
+		if (TurningInPlaceState == ETurningInPlace::ETIP_NotTurning)
+		{
+			AO_Yaw_Interp = AO_Yaw;
+		}
 	}
 	else // running or jumping
 	{
@@ -188,7 +192,6 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 
 		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
 		AO_Yaw = 0.f;
-		
 	}
 
 	// Pitch is always updated
@@ -215,6 +218,17 @@ void ABlasterCharacter::TurnInPlace(float DeltaTime)
 	else
 	{
 		TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
+	}
+
+	if (TurningInPlaceState != ETurningInPlace::ETIP_NotTurning)
+	{
+		AO_Yaw_Interp = FMath::FInterpTo(AO_Yaw_Interp, 0.f, DeltaTime, 4.f);
+		AO_Yaw = AO_Yaw_Interp;
+		if (FMath::Abs(AO_Yaw) < 15.f)
+		{
+			TurningInPlaceState = ETurningInPlace::ETIP_NotTurning;
+			StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		}
 	}
 }
 

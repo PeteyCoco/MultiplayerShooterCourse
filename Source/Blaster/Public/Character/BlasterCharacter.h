@@ -99,6 +99,7 @@ private:
 	// Aim offsets
 	float AO_Yaw;
 	float AO_Pitch;
+	float AO_Yaw_Interp;
 	FRotator StartingAimRotation;
 
 	ETurningInPlace TurningInPlaceState;
