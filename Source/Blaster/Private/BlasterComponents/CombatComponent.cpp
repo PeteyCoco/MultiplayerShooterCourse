@@ -67,6 +67,12 @@ void UCombatComponent::OnRep_EquippedWeapon()
 	}
 }
 
+void UCombatComponent::FireButtonPressed(bool bInIsFireButtonPressed)
+{
+	bIsFireButtonPressed = bInIsFireButtonPressed;
+	if (Character && bIsFireButtonPressed) Character->PlayFireMontage(bIsAiming);
+}
+
 void UCombatComponent::SetAiming(bool bInIsAiming)
 {
 	// First make changes on client so that client sees immediate response to action

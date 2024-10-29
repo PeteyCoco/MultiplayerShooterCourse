@@ -61,6 +61,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> AimAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> FireAction;
 	 
 	// Input callback functions
 	void Move(const FInputActionValue& InputActionValue);
@@ -69,6 +72,8 @@ protected:
 	void CrouchButtonPressed(const FInputActionValue& InputActionValue);
 	void AimButtonPressed(const FInputActionValue& InputActionValue);
 	void AimButtonReleased(const FInputActionValue& InputActionValue);
+	void FireButtonPressed(const FInputActionValue& InputActionValue);
+	void FireButtonReleased(const FInputActionValue& InputActionValue);
 	//~ End Input section
 
 	// Update the aim offset for a frame
@@ -108,7 +113,13 @@ private:
 
 	ETurningInPlace TurningInPlaceState;
 
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	class UAnimMontage* FireWeaponMontage;
+
 public:
+	// Play the fire weapon montage
+	void PlayFireMontage(bool bAiming);
+
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
 

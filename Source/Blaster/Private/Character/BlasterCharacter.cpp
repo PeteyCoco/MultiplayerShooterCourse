@@ -5,6 +5,7 @@
 
 #include "BlasterComponents/CombatComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Character/BlasterAnimInstance.h"
 #include "Components/WidgetComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
@@ -154,10 +155,7 @@ void ABlasterCharacter::EquipButtonPressed(const FInputActionValue& InputActionV
 
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
-	if (Combat)
-	{
-		Combat->EquipWeapon(OverlappingWeapon);
-	}
+	if (Combat) Combat->EquipWeapon(OverlappingWeapon);
 }
 
 void ABlasterCharacter::CrouchButtonPressed(const FInputActionValue& InputActionValue)
@@ -167,18 +165,22 @@ void ABlasterCharacter::CrouchButtonPressed(const FInputActionValue& InputAction
 
 void ABlasterCharacter::AimButtonPressed(const FInputActionValue& InputActionValue)
 {
-	if (Combat)
-	{
-		Combat->SetAiming(true);
-	}
+	if (Combat) Combat->SetAiming(true);
 }
 
 void ABlasterCharacter::AimButtonReleased(const FInputActionValue& InputActionValue)
 {
-	if (Combat)
-	{
-		Combat->SetAiming(false);
-	}
+	if (Combat) Combat->SetAiming(false);
+}
+
+void ABlasterCharacter::FireButtonPressed(const FInputActionValue& InputActionValue)
+{
+	if (Combat) Combat->FireButtonPressed(true);
+}
+
+void ABlasterCharacter::FireButtonReleased(const FInputActionValue& InputActionValue)
+{
+	if (Combat) Combat->FireButtonPressed(false);
 }
 
 void ABlasterCharacter::AimOffset(float DeltaTime)
@@ -249,6 +251,21 @@ void ABlasterCharacter::TurnInPlace(float DeltaTime)
 	}
 }
 
+void ABlasterCharacter::PlayFireMontage(bool bAiming)
+{
+	if (!Combat || !Combat->EquippedWeapon) return;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (AnimInstance && FireWeaponMontage)
+	{
+		AnimInstance->Montage_Play(FireWeaponMontage);
+		FName SectionName;
+		SectionName = bAiming ? FName("RifleAim") : FName("RifleHip");
+		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 {
 	if (IsLocallyControlled()) // Only true on the server for the server's character
@@ -312,5 +329,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &ABlasterCharacter::CrouchButtonPressed);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &ABlasterCharacter::AimButtonPressed);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ABlasterCharacter::AimButtonReleased);
+	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &ABlasterCharacter::FireButtonPressed);
+	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &ABlasterCharacter::FireButtonReleased);
 }
 

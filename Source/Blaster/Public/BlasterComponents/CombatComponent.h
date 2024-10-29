@@ -38,14 +38,20 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	void FireButtonPressed(bool bPressed);
+
 private:
 	TObjectPtr<ABlasterCharacter> Character;
 
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
 
+	// True if the character is aiming
 	UPROPERTY(Replicated)
 	bool bIsAiming;
+
+	// True if the fire button is pressed
+	bool bIsFireButtonPressed;
 
 	UPROPERTY(EditAnywhere)
 	float BaseWalkSpeed;
