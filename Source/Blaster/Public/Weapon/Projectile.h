@@ -10,6 +10,7 @@ class UBoxComponent;
 class UNiagaraSystem;
 class UNiagaraComponent;
 class UProjectileMovementComponent;
+class USoundCue;
 
 UCLASS()
 class BLASTER_API AProjectile : public AActor
@@ -25,7 +26,13 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+	virtual void Destroyed() override;
 //~ End AActor interface
+
+protected:
+	// Overlap callbacks
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -39,4 +46,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraComponent> TracerComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UNiagaraSystem> ImpactParticles;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<USoundCue> ImpactSound;
 };
