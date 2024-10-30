@@ -5,7 +5,6 @@
 
 #include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
-#include "DrawDebugHelpers.h"
 #include "Engine/SkeletalMeshSocket.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -36,9 +35,6 @@ void UCombatComponent::BeginPlay()
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	FHitResult HitResult;
-	TraceUnderCrosshairs(HitResult);
 }
 
 void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -77,10 +73,15 @@ void UCombatComponent::OnRep_EquippedWeapon()
 void UCombatComponent::FireButtonPressed(bool bInIsFireButtonPressed)
 {
 	bIsFireButtonPressed = bInIsFireButtonPressed;
-	if (bIsFireButtonPressed) ServerFire();
+	if (bIsFireButtonPressed)
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+		ServerFire(HitResult.ImpactPoint);
+	}
 }
 
-void UCombatComponent::TraceUnderCrosshairs(FHitResult TraceHitResult)
+void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 {
 	// Get the crosshair in world space
 	FVector2D ViewportSize;
@@ -106,31 +107,22 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult TraceHitResult)
 		GetWorld()->LineTraceSingleByChannel(TraceHitResult, Start, End, ECC_Visibility);
 
 		// Set the endpoint if no hit occured
-		if (!TraceHitResult.bBlockingHit)
-		{
-			TraceHitResult.ImpactPoint = End;
-		}
-		else
-		{
-			DrawDebugSphere(GetWorld(), TraceHitResult.ImpactPoint, 12.f, 12, FColor::Red);
-		}
-		// Update the target under the crosshair
-		HitTarget = TraceHitResult.ImpactPoint;
+		if (!TraceHitResult.bBlockingHit) TraceHitResult.ImpactPoint = End;
 	}
 }
 
-void UCombatComponent::ServerFire_Implementation()
+void UCombatComponent::ServerFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
-	MulticastFire();
+	MulticastFire(TraceHitTarget);
 }
 
-void UCombatComponent::MulticastFire_Implementation()
+void UCombatComponent::MulticastFire_Implementation(const FVector_NetQuantize& TraceHitTarget)
 {
 	if (EquippedWeapon == nullptr) return;
 	if (Character)
 	{
 		Character->PlayFireMontage(bIsAiming);
-		EquippedWeapon->Fire(HitTarget);
+		EquippedWeapon->Fire(TraceHitTarget);
 	}
 }
 
