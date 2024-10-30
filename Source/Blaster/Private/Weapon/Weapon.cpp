@@ -105,17 +105,11 @@ void AWeapon::SetWeaponState(EWeaponState State)
 
 void AWeapon::ShowPickupWidget(bool bShowWidget)
 {
-	if (PickupWidget)
-	{
-		PickupWidget->SetVisibility(bShowWidget);
-	}
+	if (PickupWidget) PickupWidget->SetVisibility(bShowWidget);
 }
 
-void AWeapon::Fire()
+void AWeapon::Fire(const FVector& HitTarget)
 {
-	if (FireAnimation)
-	{
-		WeaponMesh->PlayAnimation(FireAnimation, false);
-	}
+	if (FireAnimation) WeaponMesh->PlayAnimation(FireAnimation, false);
 }
 

@@ -37,8 +37,8 @@ public:
 	// Show or hide the pickup widget
 	void ShowPickupWidget(bool bShowWidget);
 
-	// Play the firing animation
-	void Fire();
+	// Fire this weapon
+	virtual void Fire(const FVector& HitTarget);
 
 protected:
 	virtual void BeginPlay() override;

@@ -66,4 +66,7 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed;
+
+	// Target under crosshair
+	FVector HitTarget;
 };

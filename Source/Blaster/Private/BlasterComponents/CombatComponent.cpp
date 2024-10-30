@@ -114,6 +114,8 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult TraceHitResult)
 		{
 			DrawDebugSphere(GetWorld(), TraceHitResult.ImpactPoint, 12.f, 12, FColor::Red);
 		}
+		// Update the target under the crosshair
+		HitTarget = TraceHitResult.ImpactPoint;
 	}
 }
 
@@ -128,7 +130,7 @@ void UCombatComponent::MulticastFire_Implementation()
 	if (Character)
 	{
 		Character->PlayFireMontage(bIsAiming);
-		EquippedWeapon->Fire();
+		EquippedWeapon->Fire(HitTarget);
 	}
 }
 
