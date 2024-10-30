@@ -7,6 +7,9 @@
 #include "Projectile.generated.h"
 
 class UBoxComponent;
+class UNiagaraSystem;
+class UNiagaraComponent;
+class UProjectileMovementComponent;
 
 UCLASS()
 class BLASTER_API AProjectile : public AActor
@@ -27,4 +30,13 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UBoxComponent> CollisionBox;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UNiagaraSystem> Tracer;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UNiagaraComponent> TracerComponent;
 };

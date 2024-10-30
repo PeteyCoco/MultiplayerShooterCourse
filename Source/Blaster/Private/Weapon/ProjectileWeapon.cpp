@@ -10,8 +10,11 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
 	Super::Fire(HitTarget);
 
-	APawn* InstigatorPawn = Cast<APawn>(GetOwner());
+	// Only run on the server (this is the case since the weapon is replicated and so HasAuthority is only true on the server)
+	if (!HasAuthority()) return;
 
+	// Spawn the projectile
+	APawn* InstigatorPawn = Cast<APawn>(GetOwner());
 	const USkeletalMeshSocket* MuzzleFlashSocket = GetWeaponMesh()->GetSocketByName(FName("MuzzleFlashSocket"));
 	if (MuzzleFlashSocket)
 	{
