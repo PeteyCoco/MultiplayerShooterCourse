@@ -31,6 +31,7 @@ public:
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
 protected:
+	// Aiming state functions
 	void SetAiming(bool bInIsAiming);
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bInIsAiming);
@@ -38,7 +39,12 @@ protected:
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
 
+	// Fire button pressed functions
 	void FireButtonPressed(bool bPressed);
+	UFUNCTION(Server, Reliable)
+	void ServerFire();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastFire();
 
 private:
 	TObjectPtr<ABlasterCharacter> Character;
