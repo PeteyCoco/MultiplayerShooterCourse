@@ -70,7 +70,12 @@ void UCombatComponent::OnRep_EquippedWeapon()
 void UCombatComponent::FireButtonPressed(bool bInIsFireButtonPressed)
 {
 	bIsFireButtonPressed = bInIsFireButtonPressed;
-	if (Character && bIsFireButtonPressed) Character->PlayFireMontage(bIsAiming);
+	if (EquippedWeapon == nullptr) return;
+	if (Character && bIsFireButtonPressed)
+	{
+		Character->PlayFireMontage(bIsAiming);
+		EquippedWeapon->Fire();
+	}
 }
 
 void UCombatComponent::SetAiming(bool bInIsAiming)

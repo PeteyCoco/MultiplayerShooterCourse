@@ -37,6 +37,9 @@ public:
 	// Show or hide the pickup widget
 	void ShowPickupWidget(bool bShowWidget);
 
+	// Play the firing animation
+	void Fire();
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -65,6 +68,10 @@ private:
 	// A widget indicating that the weapon can be picked up
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UWidgetComponent> PickupWidget;
+
+	// The firing animation
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TObjectPtr<UAnimationAsset> FireAnimation;
 
 public:
 	void SetWeaponState(EWeaponState State);
