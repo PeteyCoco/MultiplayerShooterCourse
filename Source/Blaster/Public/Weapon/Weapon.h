@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Weapon.generated.h"
 
+
+class ACasing;
+
 class USphereComponent;
 class UWidgetComponent;
 
@@ -72,6 +75,10 @@ private:
 	// The firing animation
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UAnimationAsset> FireAnimation;
+
+	// The actor class for bullet casings
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	TSubclassOf<ACasing> CasingClass;
 
 public:
 	void SetWeaponState(EWeaponState State);

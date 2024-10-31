@@ -6,7 +6,9 @@
 #include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "Net/UnrealNetwork.h"
+#include "Weapon/Casing.h"
 
 AWeapon::AWeapon()
 {
@@ -110,6 +112,27 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 
 void AWeapon::Fire(const FVector& HitTarget)
 {
+	// Play the firing animation
 	if (FireAnimation) WeaponMesh->PlayAnimation(FireAnimation, false);
+
+	// Spawn the casing actor
+	const USkeletalMeshSocket* AmmoEjectSocket = GetWeaponMesh()->GetSocketByName(FName("AmmoEjectSocket"));
+	if (AmmoEjectSocket)
+	{
+		const FTransform AmmoEjectSocketTransform = AmmoEjectSocket->GetSocketTransform(GetWeaponMesh());
+
+		if (CasingClass)
+		{
+			UWorld* World = GetWorld();
+			if (World)
+			{
+				World->SpawnActor<ACasing>(
+					CasingClass,
+					AmmoEjectSocketTransform.GetLocation(),
+					AmmoEjectSocketTransform.GetRotation().Rotator()
+				);
+			}
+		}
+	}
 }
 
