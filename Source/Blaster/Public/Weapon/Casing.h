@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "Casing.generated.h"
 
+
+class USoundCue;
+
 UCLASS()
 class BLASTER_API ACasing : public AActor
 {
@@ -21,7 +24,22 @@ protected:
 	virtual void BeginPlay() override;
 //~ End AActor interface
 
+protected:
+	// Overlap callbacks
+	UFUNCTION()
+	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 private:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Casing Properties")
 	TObjectPtr<UStaticMeshComponent> CasingMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Casing Properties")
+	float CasingEjectionImpulse;
+
+	// Sound played on shell impact
+	UPROPERTY(EditAnywhere, Category = "Casing Properties")
+	TObjectPtr<USoundCue> CasingSound;
+
+	// Flag to ensure casing sound is only played once
+	bool bCasingSoundPlayed = false;
 };
