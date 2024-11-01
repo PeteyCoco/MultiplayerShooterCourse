@@ -69,8 +69,32 @@ void UCombatComponent::UpdateHUDCrosshairs(float DeltaTime)
 				HUDPackage.CrosshairsTop = nullptr;
 				HUDPackage.CrosshairsBottom = nullptr;
 			}
+			UpdateCrosshairVelocityFactor(DeltaTime);
+			UpdateCrosshairInAirFactor(DeltaTime);
+			HUDPackage.CrosshairSpread = CrosshairVelocityFactor + CrosshairInAirFactor;
 			HUD->SetHUDPackage(HUDPackage);
 		}
+	}
+}
+
+void UCombatComponent::UpdateCrosshairVelocityFactor(float DeltaTime)
+{
+	const FVector2D WalkSpeedRange(0.f, Character->GetCharacterMovement()->MaxWalkSpeed);
+	const FVector2D VelocityMultiplierRange(0.f, MaxCrosshairVelocityFactor);
+	FVector Velocity = Character->GetVelocity();
+	Velocity.Z = 0.f;
+	CrosshairVelocityFactor = FMath::GetMappedRangeValueClamped(WalkSpeedRange, VelocityMultiplierRange, Velocity.Size());
+}
+
+void UCombatComponent::UpdateCrosshairInAirFactor(float DeltaTime)
+{
+	if (Character->GetCharacterMovement()->IsFalling())
+	{
+		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, MaxCrosshairInAirFactor, DeltaTime, 2.25f);
+	}
+	else
+	{
+		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
 	}
 }
 

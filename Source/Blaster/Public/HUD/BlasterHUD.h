@@ -15,15 +15,19 @@ struct FHUDPackage
 	GENERATED_BODY()
 
 public:
+	// Crosshair textures
 	TObjectPtr<UTexture2D> CrosshairsCenter;
 	TObjectPtr<UTexture2D> CrosshairsLeft;
 	TObjectPtr<UTexture2D> CrosshairsRight;	
 	TObjectPtr<UTexture2D> CrosshairsTop;
 	TObjectPtr<UTexture2D> CrosshairsBottom;
+
+	// Amount to spread the crosshairs
+	float CrosshairSpread;
 };
 
 /**
- * 
+ * HUD class for the Blaster character
  */
 UCLASS()
 class BLASTER_API ABlasterHUD : public AHUD
@@ -41,5 +45,8 @@ public:
 private:
 	FHUDPackage HUDPackage;
 
-	void DrawCrosshair(UTexture2D* Texture, const FVector2D& ViewportCenter);
+	void DrawCrosshair(UTexture2D* Texture, const FVector2D& ViewportCenter, const FVector2D& Spread);
+
+	UPROPERTY(EditAnywhere, Category = "Crosshair")
+	float CrosshairSpreadMax = 16.f;
 };

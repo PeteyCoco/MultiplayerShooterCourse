@@ -48,11 +48,31 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
+	/* Begin HUD and Crosshairs section */
+
 	// Get a hit result under the crosshairs
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
 	// Update the crosshairs on the HUD each frame
 	void UpdateHUDCrosshairs(float DeltaTime);
+
+	// Update the CrosshairVelocityFactor 
+
+	/* Value in range(0, MaxCrosshairVelocityFactor) dictating how spread the crosshair should be due to movement velocity
+	(0=No spread, MaxCrosshairVelocityFactor=Maximal spread) */
+	float CrosshairVelocityFactor;
+	float MaxCrosshairVelocityFactor = 1.f;
+	// Tick updater for crosshair velocity factor
+	void UpdateCrosshairVelocityFactor(float DeltaTime);
+
+	/* Value in range(0, MaxCrosshairInAirFactor) dictating how spread the crosshair should be due to movement velocity
+	(0=No spread, MaxCrosshairInAirFactor=Maximal spread) */
+	float CrosshairInAirFactor;
+	float MaxCrosshairInAirFactor = 2.f;
+	// Tick updater for crosshair in air factor
+	void UpdateCrosshairInAirFactor(float DeltaTime);
+
+	/* End HUD and Crosshairs section */
 
 private:
 	// Reference to the owning character
