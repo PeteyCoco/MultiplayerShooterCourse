@@ -1,5 +1,5 @@
 # Multiplayer Shooter Course
-This repository tracks my progress through the Gameplay Ability System course available [here](https://www.udemy.com/course/unreal-engine-5-cpp-multiplayer-shooter/).
+This repository tracks my progress through the Multiplayer Shooter course available [here](https://www.udemy.com/course/unreal-engine-5-cpp-multiplayer-shooter/).
 
 Topics covered:
 
