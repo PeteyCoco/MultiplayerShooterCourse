@@ -56,7 +56,7 @@ void UCombatComponent::UpdateHUDCrosshairs(float DeltaTime)
 			if (EquippedWeapon)
 			{
 				HUDPackage.CrosshairsCenter = EquippedWeapon->CrosshairsCenter;
-				HUDPackage.CrosshairsLeft = EquippedWeapon->CrosshairsCenter;
+				HUDPackage.CrosshairsLeft = EquippedWeapon->CrosshairsLeft;
 				HUDPackage.CrosshairsRight = EquippedWeapon->CrosshairsRight;
 				HUDPackage.CrosshairsTop = EquippedWeapon->CrosshairsTop;
 				HUDPackage.CrosshairsBottom = EquippedWeapon->CrosshairsBottom;
