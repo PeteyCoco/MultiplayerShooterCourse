@@ -58,15 +58,15 @@ protected:
 
 	// Update the CrosshairVelocityFactor 
 
-	/* Value in range(0, MaxCrosshairVelocityFactor) dictating how spread the crosshair should be due to movement velocity
-	(0=No spread, MaxCrosshairVelocityFactor=Maximal spread) */
+	/* Value dictating how spread the crosshair should be due to movement velocity
+	range(0, MaxCrosshairVelocityFactor) where 0=No spread, MaxCrosshairVelocityFactor=Maximal spread */
 	float CrosshairVelocityFactor;
 	float MaxCrosshairVelocityFactor = 1.f;
 	// Tick updater for crosshair velocity factor
 	void UpdateCrosshairVelocityFactor(float DeltaTime);
 
-	/* Value in range(0, MaxCrosshairInAirFactor) dictating how spread the crosshair should be due to movement velocity
-	(0=No spread, MaxCrosshairInAirFactor=Maximal spread) */
+	/* Value dictating how spread the crosshair should be due to movement velocity
+	range(0=No spread, MaxCrosshairInAirFactor=Maximal spread), where 0=No spread, MaxCrosshairVelocityFactor=Maximal spread */
 	float CrosshairInAirFactor;
 	float MaxCrosshairInAirFactor = 2.f;
 	// Tick updater for crosshair in air factor
@@ -100,4 +100,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed;
+
+	FVector HitTarget;
 };

@@ -72,5 +72,10 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		BlasterCharacter->GetMesh()->TransformToBoneSpace(FName("RightHand"), LeftHandTransform.GetLocation(), FRotator::ZeroRotator, OutPosition, OutRotation);
 		LeftHandTransform.SetLocation(OutPosition);
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
+
+		const FTransform MuzzleTipSocketTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlashSocket"), RTS_World);
+		const FTransform RightHandTransform = BlasterCharacter->GetMesh()->GetSocketTransform(FName("RightHand"), RTS_World);
+
+		const FVector MuzzleDirection = FRotationMatrix(MuzzleTipSocketTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X);
 	}
 }

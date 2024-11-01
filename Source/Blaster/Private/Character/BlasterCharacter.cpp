@@ -301,6 +301,11 @@ TObjectPtr<AWeapon> ABlasterCharacter::GetEquippedWeapon() const
 	return Combat ? Combat->EquippedWeapon : nullptr;
 }
 
+FVector ABlasterCharacter::GetHitTarget() const
+{
+	return Combat ? Combat->HitTarget : FVector();
+}
+
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	// Remember that the server never receives a rep notify

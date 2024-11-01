@@ -70,6 +70,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float AO_Pitch;
 
+	// Left hand transform used to place hand on gun
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	FTransform LeftHandTransform;
 

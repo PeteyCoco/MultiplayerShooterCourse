@@ -140,4 +140,7 @@ public:
 
 	// Return the equipped weapon
 	TObjectPtr<AWeapon> GetEquippedWeapon() const;
+
+	// Return the world location of the aim target
+	FVector GetHitTarget() const;
 };
