@@ -112,27 +112,56 @@ void AWeapon::ShowPickupWidget(bool bShowWidget)
 
 void AWeapon::Fire(const FVector& HitTarget)
 {
-	// Play the firing animation
-	if (FireAnimation) WeaponMesh->PlayAnimation(FireAnimation, false);
+	PlayFiringAnimation();
+	SpawnCasing();
+}
 
-	// Spawn the casing actor
-	const USkeletalMeshSocket* AmmoEjectSocket = GetWeaponMesh()->GetSocketByName(FName("AmmoEjectSocket"));
-	if (AmmoEjectSocket)
+void AWeapon::PlayFiringAnimation()
+{
+	if (FireAnimation)
 	{
-		const FTransform AmmoEjectSocketTransform = AmmoEjectSocket->GetSocketTransform(GetWeaponMesh());
+		WeaponMesh->PlayAnimation(FireAnimation, false);
+	}
+}
 
-		if (CasingClass)
+void AWeapon::SpawnCasing()
+{
+	const USkeletalMeshSocket* AmmoEjectSocket = GetWeaponMesh()->GetSocketByName(FName("AmmoEjectSocket"));
+	if (!AmmoEjectSocket || !CasingClass) return;
+
+	// Set Casing spawn transform with random rotation
+	const FTransform AmmoEjectSocketTransform = AmmoEjectSocket->GetSocketTransform(GetWeaponMesh());
+	FTransform CasingTransform = GenerateRandomEjectionTransform(AmmoEjectSocketTransform);
+
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		ACasing* Casing = World->SpawnActor<ACasing>(
+			CasingClass,
+			CasingTransform.GetLocation(),
+			CasingTransform.GetRotation().Rotator()
+		);
+		Casing->SetLifeSpan(CasingLifespan);
+		if (Casing)
 		{
-			UWorld* World = GetWorld();
-			if (World)
-			{
-				World->SpawnActor<ACasing>(
-					CasingClass,
-					AmmoEjectSocketTransform.GetLocation(),
-					AmmoEjectSocketTransform.GetRotation().Rotator()
-				);
-			}
+			AddCasingImpulse(Casing, AmmoEjectSocketTransform);
 		}
 	}
+}
+
+FTransform AWeapon::GenerateRandomEjectionTransform(const FTransform& SocketTransform) const
+{
+	const float RandomPitch = FMath::FRandRange(0.f, CasingPitchMax);
+	const float RandomRoll = FMath::FRandRange(0.f, 360.f);
+	const FRotator RandomRotator(RandomPitch, 0.f, RandomRoll);
+
+	return FTransform(SocketTransform.GetRotation().Rotator() + RandomRotator, SocketTransform.GetLocation());
+}
+
+void AWeapon::AddCasingImpulse(ACasing* Casing, const FTransform& SocketTransform) const
+{
+	const float RandomEjectionImpulse = FMath::FRandRange(MinCasingEjectionImpulse, MaxCasingEjectionImpulse);
+	const FVector EjectionDirection = SocketTransform.GetRotation().GetRightVector();
+	Casing->GetMesh()->AddImpulse(RandomEjectionImpulse * EjectionDirection);
 }
 

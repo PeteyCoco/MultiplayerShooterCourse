@@ -10,17 +10,21 @@ ACasing::ACasing()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
+	USceneComponent* RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	SetRootComponent(RootComp);
+
 	CasingMesh = CreateDefaultSubobject<UStaticMeshComponent>("CasingMesh");
-	SetRootComponent(CasingMesh);
+	CasingMesh->SetupAttachment(GetRootComponent());
 
 	CasingMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	CasingMesh->SetSimulatePhysics(true);
 	CasingMesh->SetEnableGravity(true);
 	CasingMesh->SetNotifyRigidBodyCollision(true);
+}
 
-	CasingEjectionImpulse = 10.f;
-
-	SetLifeSpan(5.f);
+UStaticMeshComponent* ACasing::GetMesh()
+{
+	return CasingMesh;
 }
 
 void ACasing::BeginPlay()
@@ -28,8 +32,6 @@ void ACasing::BeginPlay()
 	Super::BeginPlay();
 
 	CasingMesh->OnComponentHit.AddDynamic(this, &ACasing::OnHit);
-
-	CasingMesh->AddImpulse(CasingEjectionImpulse * GetActorForwardVector());
 }
 
 void ACasing::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

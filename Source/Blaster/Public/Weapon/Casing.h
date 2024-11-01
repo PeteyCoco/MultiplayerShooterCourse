@@ -18,6 +18,9 @@ public:
 	// Sets default values for this actor's properties
 	ACasing();
 
+	// Get the mesh for this casing
+	UStaticMeshComponent* GetMesh();
+
 //~ Begin AActor interface
 protected:
 	// Called when the game starts or when spawned
@@ -32,9 +35,6 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Casing Properties")
 	TObjectPtr<UStaticMeshComponent> CasingMesh;
-
-	UPROPERTY(EditAnywhere, Category = "Casing Properties")
-	float CasingEjectionImpulse;
 
 	// Sound played on shell impact
 	UPROPERTY(EditAnywhere, Category = "Casing Properties")

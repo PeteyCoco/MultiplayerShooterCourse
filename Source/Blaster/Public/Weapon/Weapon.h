@@ -77,8 +77,36 @@ private:
 	TObjectPtr<UAnimationAsset> FireAnimation;
 
 	// The actor class for bullet casings
-	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Casing")
 	TSubclassOf<ACasing> CasingClass;
+
+	// The minimum casing ejection impulse strength 
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Casing")
+	float MinCasingEjectionImpulse = 8.f;
+
+	// The maximum casing ejection impulse strength 
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Casing")
+	float MaxCasingEjectionImpulse = 12.f;
+
+	// The maximum random pitch of the ejected casing
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Casing")
+	float CasingPitchMax = 15.f;
+
+	// Lifespan of the casing
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Casing")
+	float CasingLifespan = 5.f;
+
+	// Play the firing animation
+	void PlayFiringAnimation();
+
+	// Spawn a spent casing at the Ammo Eject socket transform with a random rotation
+	void SpawnCasing();
+
+	// Generate a random ejection transform for the casing
+	FTransform GenerateRandomEjectionTransform(const FTransform& SocketTransform) const;
+
+	// Add a random impulse to the casing in the direction of the the Ammo Eject socket's right vector
+	void AddCasingImpulse(ACasing* Casing, const FTransform& SocketTransform) const;
 
 public:
 	void SetWeaponState(EWeaponState State);
