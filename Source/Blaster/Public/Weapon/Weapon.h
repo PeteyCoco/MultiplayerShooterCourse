@@ -10,6 +10,7 @@
 class ACasing;
 
 class USphereComponent;
+class UTexture2D;
 class UWidgetComponent;
 
 UENUM(BlueprintType)
@@ -42,6 +43,23 @@ public:
 
 	// Fire this weapon
 	virtual void Fire(const FVector& HitTarget);
+
+	//~Begin section: Textures for the weapon's crosshairs
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
+	TObjectPtr<UTexture2D> CrosshairsCenter;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
+	TObjectPtr<UTexture2D> CrosshairsLeft;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
+	TObjectPtr<UTexture2D> CrosshairsRight;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
+	TObjectPtr<UTexture2D> CrosshairsTop;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
+	TObjectPtr<UTexture2D> CrosshairsBottom;
+	//~End section: Textures for the weapon's crosshairs
 
 protected:
 	virtual void BeginPlay() override;

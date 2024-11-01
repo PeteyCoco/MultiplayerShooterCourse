@@ -7,6 +7,8 @@
 #include "CombatComponent.generated.h"
 
 class ABlasterCharacter;
+class ABlasterHUD;
+class ABlasterPlayerController;
 class AWeapon;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -46,11 +48,23 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
+	// Get a hit result under the crosshairs
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
 
-private:
-	TObjectPtr<ABlasterCharacter> Character;
+	// Update the crosshairs on the HUD each frame
+	void UpdateHUDCrosshairs(float DeltaTime);
 
+private:
+	// Reference to the owning character
+	ABlasterCharacter* Character;
+
+	// Reference to the owning player controller
+	ABlasterPlayerController* Controller;
+
+	// Reference to the HUD of the owning player controller
+	ABlasterHUD* HUD;
+
+	// The currently equipped weapon
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
 	TObjectPtr<AWeapon> EquippedWeapon;
 
