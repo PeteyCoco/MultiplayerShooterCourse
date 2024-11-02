@@ -89,8 +89,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		const FVector MuzzleX(MuzzleTipSocketTransform.GetRotation().GetAxisX());
 		DrawDebugLine(GetWorld(), MuzzleTipSocketTransform.GetLocation(), MuzzleTipSocketTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
 		DrawDebugLine(GetWorld(), MuzzleTipSocketTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
-		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + FVector::XAxisVector * 1000.f, FColor::Blue);
-		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + AimDeltaRotatorWS * FVector::XAxisVector * 1000.f, FColor::Yellow); // Should be parallel to the muzzle forward direction
+		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + FVector::XAxisVector * 1000.f, FColor::Blue); // World X-axis
+		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + AimDeltaRotatorWS * FVector::XAxisVector * 1000.f, FColor::Yellow); // Should be parallel to the muzzle's forward direction
 		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + RightHandRotatorWS * RightHandX * 1000.f, FColor::Green); // Should match world X-axis
 
 
