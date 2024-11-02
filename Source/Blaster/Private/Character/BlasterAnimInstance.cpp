@@ -74,25 +74,24 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
 
 		const FTransform MuzzleTipSocketTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlashSocket"), RTS_World);
-		const FTransform RightHandTransform = BlasterCharacter->GetMesh()->GetSocketTransform(FName("RightHand"), RTS_World);
+		const FTransform RightHandTransform = BlasterCharacter->GetMesh()->GetBoneTransform(FName("RightHand"), RTS_World);
 
 		const FVector MuzzleToTarget = BlasterCharacter->GetHitTarget() - MuzzleTipSocketTransform.GetLocation();
 		const FVector MuzzleDirection = MuzzleTipSocketTransform.GetRotation().GetForwardVector();
-		const FVector RightHandX = RightHandTransform.GetRotation().GetAxisX();
 
 		const FQuat AimDeltaRotatorMS = FQuat::FindBetween(MuzzleDirection, MuzzleToTarget); 
 		const FQuat AimDeltaRotatorWS = AimDeltaRotatorMS * MuzzleTipSocketTransform.GetRotation(); // Rotates world space to align with aim target
-		const FQuat RightHandRotatorWS = RightHandTransform.Inverse().GetRotation(); // Rotates vector in hand space to world space
 
-		FRotator RightHandRotation = UKismetMathLibrary::FindLookAtRotation(FVector::ZeroVector, BlasterCharacter->GetHitTarget());
+		RightHandRotation = FRotator(0.f, 0.f, 0.f);
+		AimTargetLocation = BlasterCharacter->GetHitTarget();
 
 		const FVector MuzzleX(MuzzleTipSocketTransform.GetRotation().GetAxisX());
 		DrawDebugLine(GetWorld(), MuzzleTipSocketTransform.GetLocation(), MuzzleTipSocketTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
 		DrawDebugLine(GetWorld(), MuzzleTipSocketTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
-		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + FVector::XAxisVector * 1000.f, FColor::Blue); // World X-axis
-		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + AimDeltaRotatorWS * FVector::XAxisVector * 1000.f, FColor::Yellow); // Should be parallel to the muzzle's forward direction
-		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + RightHandRotatorWS * RightHandX * 1000.f, FColor::Green); // Should match world X-axis
 
+		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + RightHandTransform.GetRotation().GetAxisX() * 100.f, FColor::Red);
+		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + RightHandTransform.GetRotation().GetAxisY() * 100.f, FColor::Green);
+		DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), RightHandTransform.GetLocation() + RightHandTransform.GetRotation().GetAxisZ() * 100.f, FColor::Blue);
 
 	}
 }
