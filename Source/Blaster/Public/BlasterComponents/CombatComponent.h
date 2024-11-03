@@ -58,19 +58,32 @@ protected:
 
 	// Update the CrosshairVelocityFactor 
 
-	/* Value dictating how spread the crosshair should be due to movement velocity
-	range(0, MaxCrosshairVelocityFactor) where 0=No spread, MaxCrosshairVelocityFactor=Maximal spread */
+	/* Value for the baseline crosshair spread.*/
+	float CrosshairBaselineSpread = 0.5;
+
+	/* Value dictating how spread the crosshair should be due to movement velocity*/
 	float CrosshairVelocityFactor;
 	float MaxCrosshairVelocityFactor = 1.f;
 	// Tick updater for crosshair velocity factor
 	void UpdateCrosshairVelocityFactor(float DeltaTime);
 
-	/* Value dictating how spread the crosshair should be due to movement velocity
-	range(0=No spread, MaxCrosshairInAirFactor=Maximal spread), where 0=No spread, MaxCrosshairVelocityFactor=Maximal spread */
+	/* Value dictating how spread the crosshair should be due to movement velocity*/
 	float CrosshairInAirFactor;
 	float MaxCrosshairInAirFactor = 2.f;
 	// Tick updater for crosshair in air factor
 	void UpdateCrosshairInAirFactor(float DeltaTime);
+
+	/* Value dictating how spread the crosshair should be due to aiming */
+	float CrosshairAimFactor;
+	float MaxCrosshairAimFactor = -0.58f;
+	// Tick updater for crosshair in air factor
+	void UpdateCrosshairAimFactor(float DeltaTime);
+
+	/* Value dictating how spread the crosshair should be due to firing */
+	float CrosshairShootFactor;
+	float MaxCrosshairShootFactor = 1.f;
+	// Tick updater for crosshair in air factor
+	void UpdateCrosshairShootFactor(float DeltaTime);
 
 	/* End HUD and Crosshairs section */
 
