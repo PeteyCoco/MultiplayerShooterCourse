@@ -111,26 +111,15 @@ void UCombatComponent::UpdateCrosshairVelocityFactor(float DeltaTime)
 
 void UCombatComponent::UpdateCrosshairInAirFactor(float DeltaTime)
 {
-	if (Character->GetCharacterMovement()->IsFalling())
-	{
-		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, MaxCrosshairInAirFactor, DeltaTime, 2.25f);
-	}
-	else
-	{
-		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
-	}
+	float TargetFactor = Character->GetCharacterMovement()->IsFalling() ? MaxCrosshairInAirFactor : 0.f;
+	float InterpSpeed = Character->GetCharacterMovement()->IsFalling() ? 2.25f : 30.f;
+	CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, TargetFactor, DeltaTime, InterpSpeed);
 }
 
 void UCombatComponent::UpdateCrosshairAimFactor(float DeltaTime)
 {
-	if (bIsAiming)
-	{
-		CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, MaxCrosshairAimFactor, DeltaTime, 30.f);
-	}
-	else
-	{
-		CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.f, DeltaTime, 30.f);
-	}
+	float TargetFactor = bIsAiming ? MaxCrosshairAimFactor : 0.f;
+	CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, TargetFactor, DeltaTime, 30.f);
 }
 
 void UCombatComponent::UpdateCrosshairShootFactor(float DeltaTime)
