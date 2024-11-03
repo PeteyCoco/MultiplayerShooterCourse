@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "HUD/BlasterHUD.h"
 #include "Components/ActorComponent.h"
 #include "CombatComponent.generated.h"
 
@@ -49,6 +50,9 @@ protected:
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
 	/* Begin HUD and Crosshairs section */
+
+	// The HUD data to draw to the screen
+	FHUDPackage HUDPackage;
 
 	// Get a hit result under the crosshairs
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
@@ -137,4 +141,6 @@ private:
 	void UpdateCameraFOV(float DeltaTime);
 
 	/* End Aiming and FOV section */
+
+
 };

@@ -44,6 +44,7 @@ ABlasterCharacter::ABlasterCharacter()
 
 	// Collision properties
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 
 	// Net properties
@@ -130,7 +131,6 @@ void ABlasterCharacter::Look(const FInputActionValue& InputActionValue)
 
 	if (!InputAxisVector.IsNearlyZero())
 	{
-		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::White, FString::Printf(TEXT("X: %f, Y: %f"), InputAxisVector.X, InputAxisVector.Y));
 		// Perform rotation
 		AddControllerYawInput(InputAxisVector.X);
 		AddControllerPitchInput(InputAxisVector.Y);

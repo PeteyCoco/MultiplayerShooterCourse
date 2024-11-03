@@ -62,6 +62,9 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float Lean;
 
+	UPROPERTY(EditAnywhere, Category = "Animation Properties", meta = (AllowPrivateAccess = true))
+	float LeanInterpSpeed = 6.f;
+
 	// Aim offset for yaw
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	float AO_Yaw;
@@ -76,7 +79,11 @@ private:
 
 	// Cache the current aim target location
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
-	FVector AimTargetLocation;
+	FVector AimTargetLocation; 
+
+	// Smoothness of aim target location movement
+	UPROPERTY(EditAnywhere, Category = "Animation Properties", meta = (AllowPrivateAccess = true))
+	float AimTargetLocationInterpSpeed = 10.f;
 
 	FRotator CharacterRotationLastFrame;
 	FRotator CharacterRotation;
