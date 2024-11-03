@@ -117,6 +117,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	class UAnimMontage* FireWeaponMontage;
 
+	// Hide the character if the camera is too close
+	void HideCharacterIfCameraClose();
+
+	// Distance threshold between camera and character for hiding
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float CameraThreshold = 200.f;
+
 public:
 	// Play the fire weapon montage
 	void PlayFireMontage(bool bAiming);
