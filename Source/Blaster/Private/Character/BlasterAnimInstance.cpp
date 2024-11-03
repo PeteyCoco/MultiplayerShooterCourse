@@ -64,7 +64,15 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	TurningInPlaceState = BlasterCharacter->GetTurningInPlace();
 
 	// Get the current aim target in world space
-	AimTargetLocation = BlasterCharacter->GetHitTarget();
+	if (BlasterCharacter->IsLocallyControlled())
+	{
+		bIsLocallyControlled = true;
+		AimTargetLocation = BlasterCharacter->GetHitTarget();
+	}
+	else
+	{
+		bIsLocallyControlled = false;
+	}
 
 	// Get the left hand transform data
 	if (bIsWeaponEquipped && EquippedWeapon && EquippedWeapon->GetWeaponMesh() && BlasterCharacter->GetMesh())

@@ -83,4 +83,7 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	ETurningInPlace TurningInPlaceState;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	bool bIsLocallyControlled;
 };
