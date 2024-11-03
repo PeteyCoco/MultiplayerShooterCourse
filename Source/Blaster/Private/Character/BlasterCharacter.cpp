@@ -214,14 +214,15 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 	}
 
 	// Pitch is always updated
-	AO_Pitch = GetBaseAimRotation().Pitch;
-	if (!IsLocallyControlled() && AO_Pitch > 90.f)
+	float AO_PitchTarget = GetBaseAimRotation().Pitch;
+	if (!IsLocallyControlled() && AO_PitchTarget > 90.f)
 	{
 		// Remap replicated pitch value to the original range
 		const FVector2D InRange(270.f, 360.f);
 		const FVector2D OutRange(-90.f, 0.f);
-		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
+		AO_PitchTarget = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_PitchTarget);
 	}
+	AO_Pitch = FMath::FInterpTo(AO_Pitch, AO_PitchTarget, DeltaTime, 10.f);
 }
 
 void ABlasterCharacter::TurnInPlace(float DeltaTime)
