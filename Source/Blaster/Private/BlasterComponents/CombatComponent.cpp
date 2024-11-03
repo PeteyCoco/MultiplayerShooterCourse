@@ -3,6 +3,7 @@
 
 #include "BlasterComponents/CombatComponent.h"
 
+#include "Camera/CameraComponent.h"
 #include "Character/BlasterCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
@@ -31,6 +32,12 @@ void UCombatComponent::BeginPlay()
 	if (Character)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+
+		if (Character->GetFollowCamera())
+		{
+			DefaultFOV = Character->GetFollowCamera()->FieldOfView;
+			CurrentFOV = DefaultFOV;
+		}
 	}
 }
 
@@ -38,12 +45,14 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	UpdateHUDCrosshairs(DeltaTime);
 	if (Character && Character->IsLocallyControlled())
 	{
 		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 		HitTarget = HitResult.ImpactPoint;
+
+		UpdateCameraFOV(DeltaTime);
+		UpdateHUDCrosshairs(DeltaTime);
 	}
 }
 
@@ -101,6 +110,25 @@ void UCombatComponent::UpdateCrosshairInAirFactor(float DeltaTime)
 	else
 	{
 		CrosshairInAirFactor = FMath::FInterpTo(CrosshairInAirFactor, 0.f, DeltaTime, 30.f);
+	}
+}
+
+void UCombatComponent::UpdateCameraFOV(float DeltaTime)
+{
+	if (EquippedWeapon == nullptr) return;
+
+	if (bIsAiming)
+	{
+		CurrentFOV = FMath::FInterpTo(CurrentFOV, EquippedWeapon->GetZoomedFOV(), DeltaTime, EquippedWeapon->GetZoomInterpSpeed());
+	}
+	else
+	{
+		CurrentFOV = FMath::FInterpTo(CurrentFOV, DefaultFOV, DeltaTime, ZoomedInterpSpeed);
+	}
+
+	if (Character && Character->GetFollowCamera())
+	{
+		Character->GetFollowCamera()->SetFieldOfView(CurrentFOV);
 	}
 }
 
@@ -197,7 +225,7 @@ void UCombatComponent::SetAiming(bool bInIsAiming)
 {
 	// First make changes on client so that client sees immediate response to action
 	bIsAiming = bInIsAiming;
-	if (Character)
+	if (Character && EquippedWeapon)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}
@@ -210,7 +238,7 @@ void UCombatComponent::SetAiming(bool bInIsAiming)
 void UCombatComponent::ServerSetAiming_Implementation(bool bInIsAiming)
 {
 	bIsAiming = bInIsAiming;
-	if (Character)
+	if (Character && EquippedWeapon)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}

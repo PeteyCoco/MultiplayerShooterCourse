@@ -143,4 +143,7 @@ public:
 
 	// Return the world location of the aim target
 	FVector GetHitTarget() const;
+
+	// Get the follow camera
+	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 };

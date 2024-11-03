@@ -126,10 +126,22 @@ private:
 	// Add a random impulse to the casing in the direction of the the Ammo Eject socket's right vector
 	void AddCasingImpulse(ACasing* Casing, const FTransform& SocketTransform) const;
 
+	/*~ Begin aiming FOV section */
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Aiming")
+	float ZoomedFOV = 30.f;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Aiming")
+	float ZoomInterpSpeed = 20.f;
+	/*~ End aiming FOV section */
+
 public:
 	void SetWeaponState(EWeaponState State);
 
 	USphereComponent* GetAreaSphere() const { return AreaSphere; }
 
 	USkeletalMeshComponent* GetWeaponMesh() const { return WeaponMesh; }
+
+	float GetZoomedFOV() const { return ZoomedFOV; }
+
+	float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
 };

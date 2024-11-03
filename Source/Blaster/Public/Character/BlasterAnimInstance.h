@@ -74,11 +74,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	FTransform LeftHandTransform;
 
-	// Right hand rotation used to aim gun towards target
-	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
-	FRotator RightHandRotation;
-
-	// Right hand rotation used to aim gun towards target
+	// Cache the current aim target location
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	FVector AimTargetLocation;
 

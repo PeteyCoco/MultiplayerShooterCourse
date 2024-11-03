@@ -101,5 +101,27 @@ private:
 	UPROPERTY(EditAnywhere)
 	float AimWalkSpeed;
 
+	// The aim target in world space
 	FVector HitTarget;
+
+	/* Begin Aiming and FOV section */
+
+	// Field of view when not aiming; set to the camera's base FOV in BeginPlay
+	float DefaultFOV;
+
+	// The current FOV
+	float CurrentFOV;
+
+	// The FOV in the aiming state
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float ZoomedFOV = 30.f;
+
+	// The interpolation speed for camera zoom
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float ZoomedInterpSpeed = 20.f;
+
+	// Update the FOV each frame
+	void UpdateCameraFOV(float DeltaTime);
+
+	/* End Aiming and FOV section */
 };
