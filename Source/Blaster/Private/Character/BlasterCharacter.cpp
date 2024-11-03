@@ -130,6 +130,7 @@ void ABlasterCharacter::Look(const FInputActionValue& InputActionValue)
 
 	if (!InputAxisVector.IsNearlyZero())
 	{
+		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::White, FString::Printf(TEXT("X: %f, Y: %f"), InputAxisVector.X, InputAxisVector.Y));
 		// Perform rotation
 		AddControllerYawInput(InputAxisVector.X);
 		AddControllerPitchInput(InputAxisVector.Y);
