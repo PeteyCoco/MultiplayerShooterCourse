@@ -8,8 +8,8 @@
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "BlasterCharacter.generated.h"
 
+class ABlasterPlayerController;
 class AWeapon;
-
 class UCameraComponent;
 class UCombatComponent;
 class UInputAction;
@@ -27,20 +27,52 @@ class BLASTER_API ABlasterCharacter : public ACharacter, public IInteractWithCro
 public:
 	ABlasterCharacter();
 
+	//~ Begin ACharacter interface
+public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
-
 	virtual void PostInitializeComponents() override;
-
 protected:
 	virtual void BeginPlay() override;
-
-	//~ Begin ACharacter interface
 	virtual void Jump() override;
 	//~ End ACharacter interface
 
+public:
+	// Play the fire weapon montage
+	void PlayFireMontage(bool bAiming);
+
+	UFUNCTION(NetMulticast, Unreliable, Category = "Combat")
+	void MulticastHit();
+
+	// Set the overlapping weapon
+	void SetOverlappingWeapon(AWeapon* Weapon);
+
+	// Return true if a weapon is equipped
+	bool IsWeaponEquipped() const;
+
+	// Return true if the character is aiming
+	bool IsAiming() const;
+
+	// Return the yaw aim offset
+	float GetAO_Yaw() const { return AO_Yaw; }
+
+	// Return the pitch aim offset
+	float GetAO_Pitch() const { return AO_Pitch; }
+
+	// Return the turning in place state
+	ETurningInPlace GetTurningInPlace() const { return TurningInPlaceState; }
+
+	// Return the equipped weapon
+	TObjectPtr<AWeapon> GetEquippedWeapon() const;
+
+	// Return the world location of the aim target
+	FVector GetHitTarget() const;
+
+	// Get the follow camera
+	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+protected:
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> InputMappingContext;
@@ -123,7 +155,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
 	UAnimMontage* HitReactMontage;
 
-
 	// Hide the character if the camera is too close
 	void HideCharacterIfCameraClose();
 
@@ -131,7 +162,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float CameraThreshold = 200.f;
 
-	/* Player Health */
+	/* Begin section: Player Health */
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
 	float MaxHealth = 100.f;
 
@@ -140,38 +171,7 @@ private:
 
 	UFUNCTION()
 	void OnRep_Health();
+	/* End section: Player Health */
 
-public:
-	// Play the fire weapon montage
-	void PlayFireMontage(bool bAiming);
-
-	UFUNCTION(NetMulticast, Unreliable, Category = "Combat")
-	void MulticastHit();
-
-	// Set the overlapping weapon
-	void SetOverlappingWeapon(AWeapon* Weapon);
-
-	// Return true if a weapon is equipped
-	bool IsWeaponEquipped() const;
-
-	// Return true if the character is aiming
-	bool IsAiming() const;
-
-	// Return the yaw aim offset
-	float GetAO_Yaw() const { return AO_Yaw; }
-
-	// Return the pitch aim offset
-	float GetAO_Pitch() const { return AO_Pitch; }
-
-	// Return the turning in place state
-	ETurningInPlace GetTurningInPlace() const { return TurningInPlaceState; }
-
-	// Return the equipped weapon
-	TObjectPtr<AWeapon> GetEquippedWeapon() const;
-
-	// Return the world location of the aim target
-	FVector GetHitTarget() const;
-
-	// Get the follow camera
-	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	ABlasterPlayerController* BlasterPlayerController;
 };
