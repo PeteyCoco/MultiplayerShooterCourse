@@ -44,7 +44,7 @@ public:
 	// Fire this weapon
 	virtual void Fire(const FVector& HitTarget);
 
-	//~Begin section: Textures for the weapon's crosshairs
+	// Begin section: Textures for the weapon's crosshairs
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
 	TObjectPtr<UTexture2D> CrosshairsCenter;
 
@@ -59,7 +59,15 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
 	TObjectPtr<UTexture2D> CrosshairsBottom;
-	//~End section: Textures for the weapon's crosshairs
+	// End section: Textures for the weapon's crosshairs
+
+	// Begin section: Automatic fire
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float FireDelay = 0.15f;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	bool bIsAutomatic = true;
+	// End section: Automatic fire
 
 protected:
 	virtual void BeginPlay() override;

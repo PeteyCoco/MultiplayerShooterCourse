@@ -12,12 +12,12 @@ class ABlasterHUD;
 class ABlasterPlayerController;
 class AWeapon;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BLASTER_API UCombatComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UCombatComponent();
 
 	friend class ABlasterCharacter;
@@ -25,122 +25,92 @@ public:
 	//~ Begin UActorComponent interface
 protected:
 	virtual void BeginPlay() override;
-public:	
+public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End UActorComponent interface
 
-public:
+	/** Equips a weapon to the character */
 	void EquipWeapon(AWeapon* WeaponToEquip);
+
+	// Fire functions
+	void FireButtonPressed(bool bInIsFireButtonPressed);
+	void Fire();
 
 protected:
 	// Aiming state functions
 	void SetAiming(bool bInIsAiming);
+
+	// RPCs
 	UFUNCTION(Server, Reliable)
 	void ServerSetAiming(bool bInIsAiming);
-
-	UFUNCTION()
-	void OnRep_EquippedWeapon();
-
-	// Fire button pressed functions
-	void FireButtonPressed(bool bPressed);
 	UFUNCTION(Server, Reliable)
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 
-	/* Begin HUD and Crosshairs section */
+	UFUNCTION()
+	void OnRep_EquippedWeapon();
 
-	// The HUD data to draw to the screen
-	FHUDPackage HUDPackage;
+	// Fire timer management
+	void FireTimerStart();
+	void FireTimerFinish();
 
-	// Get a hit result under the crosshairs
+	// HUD and crosshair functions
 	void TraceUnderCrosshairs(FHitResult& TraceHitResult);
-
-	// Update the crosshairs on the HUD each frame
 	void UpdateHUDCrosshairs(float DeltaTime);
-
-	// Update the CrosshairVelocityFactor 
-
-	/* Value for the baseline crosshair spread.*/
-	float CrosshairBaselineSpread = 0.5;
-
-	/* Value dictating how spread the crosshair should be due to movement velocity*/
-	float CrosshairVelocityFactor;
-	float MaxCrosshairVelocityFactor = 1.f;
-	// Tick updater for crosshair velocity factor
 	void UpdateCrosshairVelocityFactor(float DeltaTime);
-
-	/* Value dictating how spread the crosshair should be due to movement velocity*/
-	float CrosshairInAirFactor;
-	float MaxCrosshairInAirFactor = 2.f;
-	// Tick updater for crosshair in air factor
 	void UpdateCrosshairInAirFactor(float DeltaTime);
-
-	/* Value dictating how spread the crosshair should be due to aiming */
-	float CrosshairAimFactor;
-	float MaxCrosshairAimFactor = -0.58f;
-	// Tick updater for crosshair in air factor
 	void UpdateCrosshairAimFactor(float DeltaTime);
-
-	/* Value dictating how spread the crosshair should be due to firing */
-	float CrosshairShootFactor;
-	float MaxCrosshairShootFactor = 1.f;
-	// Tick updater for crosshair in air factor
 	void UpdateCrosshairShootFactor(float DeltaTime);
 
-	/* End HUD and Crosshairs section */
+	// Camera and FOV
+	void UpdateCameraFOV(float DeltaTime);
 
 private:
-	// Reference to the owning character
-	ABlasterCharacter* Character;
+	// References
+	ABlasterCharacter* Character = nullptr;
+	ABlasterPlayerController* Controller = nullptr;
+	ABlasterHUD* HUD = nullptr;
 
-	// Reference to the owning player controller
-	ABlasterPlayerController* Controller;
-
-	// Reference to the HUD of the owning player controller
-	ABlasterHUD* HUD;
-
-	// The currently equipped weapon
+	// Weapon and aiming states
 	UPROPERTY(ReplicatedUsing = OnRep_EquippedWeapon)
-	TObjectPtr<AWeapon> EquippedWeapon;
-
-	// True if the character is aiming
+	TObjectPtr<AWeapon> EquippedWeapon = nullptr;
 	UPROPERTY(Replicated)
-	bool bIsAiming;
+	bool bIsAiming = false;
 
-	// True if the fire button is pressed
-	bool bIsFireButtonPressed;
+	// Fire button state and timer
+	bool bIsFireButtonPressed = false;
+	FTimerHandle FireTimer;
+	bool bCanFire = true;
+
+	// HUD crosshair properties
+	FHUDPackage HUDPackage;
+	float CrosshairVelocityFactor = 0.f;
+	float CrosshairInAirFactor = 0.f;
+	float CrosshairAimFactor = 0.f;
+	float CrosshairShootFactor = 0.f;
 
 	UPROPERTY(EditAnywhere)
-	float BaseWalkSpeed;
-
+	float BaseWalkSpeed = 600.f;
 	UPROPERTY(EditAnywhere)
-	float AimWalkSpeed;
+	float AimWalkSpeed = 400.f;
 
-	// The aim target in world space
-	FVector HitTarget;
+	// Crosshair spread properties
+	float CrosshairBaselineSpread = 0.5f;
+	float MaxCrosshairVelocityFactor = 1.f;
+	float MaxCrosshairInAirFactor = 2.f;
+	float MaxCrosshairAimFactor = -0.58f;
+	float MaxCrosshairShootFactor = 1.f;
 
-	/* Begin Aiming and FOV section */
-
-	// Field of view when not aiming; set to the camera's base FOV in BeginPlay
+	// Aiming and FOV properties
 	float DefaultFOV;
-
-	// The current FOV
 	float CurrentFOV;
-
-	// The FOV in the aiming state
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float ZoomedFOV = 30.f;
-
-	// The interpolation speed for camera zoom
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float ZoomedInterpSpeed = 20.f;
 
-	// Update the FOV each frame
-	void UpdateCameraFOV(float DeltaTime);
-
-	/* End Aiming and FOV section */
-
-
+	// Targeting
+	FVector HitTarget;
 };
