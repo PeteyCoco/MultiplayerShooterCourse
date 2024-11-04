@@ -86,6 +86,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
 
+	// Play the hit react montage
+	void PlayHitReactMontage();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -114,8 +117,12 @@ private:
 
 	ETurningInPlace TurningInPlaceState;
 
-	UPROPERTY(EditAnywhere, Category = "Combat")
-	class UAnimMontage* FireWeaponMontage;
+	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
+	UAnimMontage* FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
+	UAnimMontage* HitReactMontage;
+
 
 	// Hide the character if the camera is too close
 	void HideCharacterIfCameraClose();
@@ -127,6 +134,9 @@ private:
 public:
 	// Play the fire weapon montage
 	void PlayFireMontage(bool bAiming);
+
+	UFUNCTION(NetMulticast, Unreliable, Category = "Combat")
+	void MulticastHit();
 
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);

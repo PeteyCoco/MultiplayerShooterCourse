@@ -4,3 +4,5 @@
 
 #include "CoreMinimal.h"
 
+// Custom collision channels
+#define ECC_SkeletalMesh ECollisionChannel::ECC_GameTraceChannel1
