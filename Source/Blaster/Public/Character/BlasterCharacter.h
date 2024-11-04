@@ -131,6 +131,16 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	float CameraThreshold = 200.f;
 
+	/* Player Health */
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxHealth = 100.f;
+
+	UPROPERTY(VisibleAnywhere, ReplicatedUsing = OnRep_Health, Category = "Player Stats")
+	float Health = 100.f;
+
+	UFUNCTION()
+	void OnRep_Health();
+
 public:
 	// Play the fire weapon montage
 	void PlayFireMontage(bool bAiming);
