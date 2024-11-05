@@ -42,9 +42,6 @@ public:
 	// Play the fire weapon montage
 	void PlayFireMontage(bool bAiming);
 
-	UFUNCTION(NetMulticast, Unreliable, Category = "Combat")
-	void MulticastHit();
-
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
 
@@ -120,6 +117,12 @@ protected:
 
 	// Play the hit react montage
 	void PlayHitReactMontage();
+
+	// Callback to damage event
+	UFUNCTION()
+	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatorController, AActor* DamageCauser);
+
+	void UpdateHUDHealth();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
