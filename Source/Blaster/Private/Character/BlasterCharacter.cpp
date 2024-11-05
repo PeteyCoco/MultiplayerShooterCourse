@@ -406,6 +406,10 @@ FVector ABlasterCharacter::GetHitTarget() const
 
 void ABlasterCharacter::Elim()
 {
+	if (Combat && Combat->EquippedWeapon)
+	{
+		Combat->EquippedWeapon->Dropped();
+	}
 	MulticastElim();
 
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinish, ElimTimerDelay);
@@ -416,8 +420,22 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	bIsEliminated = true;
 	PlayElimMontage();
 
-	CreateDissolveDynamicMaterialInstances();
 	StartDissolveMaterial();
+
+	DisableMovement();
+	
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+void ABlasterCharacter::DisableMovement()
+{
+	GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->StopMovementImmediately();
+	if (BlasterPlayerController)
+	{
+		DisableInput(BlasterPlayerController);
+	}
 }
 
 void ABlasterCharacter::CreateDissolveDynamicMaterialInstances()
@@ -447,6 +465,8 @@ void ABlasterCharacter::ElimTimerFinish()
 
 void ABlasterCharacter::StartDissolveMaterial()
 {
+	CreateDissolveDynamicMaterialInstances();
+
 	DissolveTrack.BindDynamic(this, &ABlasterCharacter::UpdateDissolveMaterial);
 	if (DissolveTimeline && DissolveCurve)
 	{

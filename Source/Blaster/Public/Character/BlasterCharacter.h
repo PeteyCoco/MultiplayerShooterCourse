@@ -226,4 +226,7 @@ private:
 
 	void CreateDissolveDynamicMaterialInstances();
 	/* End section: Dissolve effect*/
+
+	void DisableMovement();
+
 };

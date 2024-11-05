@@ -44,6 +44,9 @@ public:
 	// Fire this weapon
 	virtual void Fire(const FVector& HitTarget);
 
+	// Logic executed when the weapon is dropped
+	void Dropped();
+
 	// Begin section: Textures for the weapon's crosshairs
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
 	TObjectPtr<UTexture2D> CrosshairsCenter;
