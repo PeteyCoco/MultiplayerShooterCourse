@@ -72,6 +72,12 @@ public:
 	// Handle elimination logic
 	void Elim();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastElim();
+
+	// Return true if this character has been eliminated
+	bool IsEliminated() const { return bIsEliminated; }
+
 protected:
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -118,8 +124,8 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
 
-	// Play the hit react montage
 	void PlayHitReactMontage();
+	void PlayElimMontage();
 
 	// Callback to damage event
 	UFUNCTION()
@@ -161,6 +167,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
 	UAnimMontage* HitReactMontage;
 
+	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
+	UAnimMontage* ElimMontage;
+
 	// Hide the character if the camera is too close
 	void HideCharacterIfCameraClose();
 
@@ -178,6 +187,8 @@ private:
 	UFUNCTION()
 	void OnRep_Health();
 	/* End section: Player Health */
+
+	bool bIsEliminated = false;
 
 	ABlasterPlayerController* BlasterPlayerController;
 };

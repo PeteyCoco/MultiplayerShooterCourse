@@ -325,11 +325,20 @@ void ABlasterCharacter::PlayHitReactMontage()
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if (AnimInstance && HitReactMontage)
+	if (AnimInstance && HitReactMontage && !AnimInstance->IsAnyMontagePlaying())
 	{
 		AnimInstance->Montage_Play(HitReactMontage);
 		FName SectionName("FromFront");
 		AnimInstance->Montage_JumpToSection(SectionName);
+	}
+}
+
+void ABlasterCharacter::PlayElimMontage()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && ElimMontage)
+	{
+		AnimInstance->Montage_Play(ElimMontage);
 	}
 }
 
@@ -391,6 +400,13 @@ FVector ABlasterCharacter::GetHitTarget() const
 
 void ABlasterCharacter::Elim()
 {
+	MulticastElim();
+}
+
+void ABlasterCharacter::MulticastElim_Implementation()
+{
+	bIsEliminated = true;
+	PlayElimMontage();
 }
 
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)

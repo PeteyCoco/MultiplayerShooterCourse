@@ -93,4 +93,7 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
 	bool bIsLocallyControlled;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Character Properties", meta = (AllowPrivateAccess = true))
+	bool bIsEliminated;
 };
