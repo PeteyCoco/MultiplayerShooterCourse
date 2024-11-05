@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Character.h"
 #include "Blaster/BlasterTypes/TurningInPlace.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
@@ -199,4 +200,30 @@ private:
 	float ElimTimerDelay = 3.f;
 	void ElimTimerFinish();
 	/* End section: Elimination timer*/
+
+	/* Begin section: Dissolve effect*/
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UTimelineComponent> DissolveTimeline;
+
+	UFUNCTION()
+	void StartDissolveMaterial();
+
+	UFUNCTION()
+	void UpdateDissolveMaterial(float DissolveValue);
+
+	FOnTimelineFloat DissolveTrack;
+
+	// Curve determining dissolve effect (time axis is normalized to DissolveRate)
+	UPROPERTY(EditAnywhere, Category = "Elimination|Effects")
+	TObjectPtr<UCurveFloat> DissolveCurve;
+
+	// The rate of the dissolve effect (1/sec)
+	UPROPERTY(EditAnywhere, Category = "Elimination|Effects")
+	float DissolveRate = 1.f;
+
+	// Dynamic instance that we can change at runtime
+	TArray<UMaterialInstanceDynamic*> DissolveDynamicMaterialInstances;
+
+	void CreateDissolveDynamicMaterialInstances();
+	/* End section: Dissolve effect*/
 };

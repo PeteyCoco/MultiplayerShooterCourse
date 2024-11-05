@@ -54,6 +54,9 @@ ABlasterCharacter::ABlasterCharacter()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 
+	// Dissolve timeline
+	DissolveTimeline = CreateDefaultSubobject<UTimelineComponent>("DissolveTimelineComponent");
+
 	// Net properties
 	NetUpdateFrequency = 66.f;
 	MinNetUpdateFrequency = 33.f;
@@ -412,6 +415,26 @@ void ABlasterCharacter::MulticastElim_Implementation()
 {
 	bIsEliminated = true;
 	PlayElimMontage();
+
+	CreateDissolveDynamicMaterialInstances();
+	StartDissolveMaterial();
+}
+
+void ABlasterCharacter::CreateDissolveDynamicMaterialInstances()
+{
+	int32 MaterialCount = GetMesh()->GetNumMaterials();
+	DissolveDynamicMaterialInstances.SetNum(MaterialCount);
+	for (int32 i = 0; i < MaterialCount; i++)
+	{
+		UMaterialInterface* Material = GetMesh()->GetMaterial(i);
+		if (Material)
+		{ 
+			DissolveDynamicMaterialInstances[i] = (UMaterialInstanceDynamic::Create(Material, this));
+			GetMesh()->SetMaterial(i, DissolveDynamicMaterialInstances[i]);
+			DissolveDynamicMaterialInstances[i]->SetScalarParameterValue(TEXT("Dissolve"), 0.f);
+			DissolveDynamicMaterialInstances[i]->SetScalarParameterValue(TEXT("Glow"), 100.f);
+		}
+	}
 }
 
 void ABlasterCharacter::ElimTimerFinish()
@@ -419,6 +442,28 @@ void ABlasterCharacter::ElimTimerFinish()
 	if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
 	{
 		BlasterGameMode->RequestRespawn(this, Controller);
+	}
+}
+
+void ABlasterCharacter::StartDissolveMaterial()
+{
+	DissolveTrack.BindDynamic(this, &ABlasterCharacter::UpdateDissolveMaterial);
+	if (DissolveTimeline && DissolveCurve)
+	{
+		DissolveTimeline->AddInterpFloat(DissolveCurve, DissolveTrack);
+		DissolveTimeline->SetPlayRate(DissolveRate);
+		DissolveTimeline->Play();
+	}
+}
+
+void ABlasterCharacter::UpdateDissolveMaterial(float DissolveValue)
+{
+	for (auto DissolveDynamicMaterialInstance : DissolveDynamicMaterialInstances)
+	{
+		if (DissolveDynamicMaterialInstance)
+		{
+			DissolveDynamicMaterialInstance->SetScalarParameterValue(TEXT("Dissolve"), DissolveValue);
+		}
 	}
 }
 
