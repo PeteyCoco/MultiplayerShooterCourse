@@ -13,6 +13,7 @@
 #include "EnhancedInput/Public/EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameMode/BlasterGameMode.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/BlasterPlayerController.h"
@@ -336,6 +337,16 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 {
 	Health = FMath::Clamp(Health - Damage, 0.f, MaxHealth);
 	OnRep_Health();
+
+	if (Health <= 0.f)
+	{
+		if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
+		{
+			BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
+			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
+		}
+	}
 }
 
 void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
@@ -376,6 +387,10 @@ TObjectPtr<AWeapon> ABlasterCharacter::GetEquippedWeapon() const
 FVector ABlasterCharacter::GetHitTarget() const
 {
 	return Combat ? Combat->HitTarget : FVector();
+}
+
+void ABlasterCharacter::Elim()
+{
 }
 
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)

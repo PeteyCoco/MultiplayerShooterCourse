@@ -69,6 +69,9 @@ public:
 	// Get the follow camera
 	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Handle elimination logic
+	void Elim();
+
 protected:
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
