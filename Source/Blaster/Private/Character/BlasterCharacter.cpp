@@ -17,11 +17,14 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/BlasterPlayerController.h"
+#include "TimerManager.h"
 #include "Weapon/Weapon.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("CameraBoom");
 	CameraBoom->SetupAttachment(GetMesh());
@@ -401,12 +404,22 @@ FVector ABlasterCharacter::GetHitTarget() const
 void ABlasterCharacter::Elim()
 {
 	MulticastElim();
+
+	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinish, ElimTimerDelay);
 }
 
 void ABlasterCharacter::MulticastElim_Implementation()
 {
 	bIsEliminated = true;
 	PlayElimMontage();
+}
+
+void ABlasterCharacter::ElimTimerFinish()
+{
+	if (ABlasterGameMode* BlasterGameMode = GetWorld()->GetAuthGameMode<ABlasterGameMode>())
+	{
+		BlasterGameMode->RequestRespawn(this, Controller);
+	}
 }
 
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)

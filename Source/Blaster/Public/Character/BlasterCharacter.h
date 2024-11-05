@@ -69,9 +69,10 @@ public:
 	// Get the follow camera
 	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	// Handle elimination logic
+	// Server elimination logic
 	void Elim();
 
+	// Cosmetic elimination logic
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastElim();
 
@@ -153,6 +154,8 @@ private:
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
+	ABlasterPlayerController* BlasterPlayerController;
+
 	// Aim offsets
 	float AO_Yaw;
 	float AO_Pitch;
@@ -190,5 +193,10 @@ private:
 
 	bool bIsEliminated = false;
 
-	ABlasterPlayerController* BlasterPlayerController;
+	/* Begin section: Elimination timer*/
+	FTimerHandle ElimTimer;
+	UPROPERTY(EditDefaultsOnly, Category = "Elimination")
+	float ElimTimerDelay = 3.f;
+	void ElimTimerFinish();
+	/* End section: Elimination timer*/
 };
