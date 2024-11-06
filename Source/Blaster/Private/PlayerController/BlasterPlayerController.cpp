@@ -45,7 +45,7 @@ void ABlasterPlayerController::SetHUDScore(float Score)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	const bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HealthBar && BlasterHUD->CharacterOverlay->ScoreAmount;
+	const bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->ScoreAmount;
 	if (bHUDValid)
 	{
 		const FString ScoreText = FString::Printf(TEXT("%d"), FMath::FloorToInt(Score));
@@ -57,10 +57,22 @@ void ABlasterPlayerController::SetHUDDeaths(int Deaths)
 {
 	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
 
-	const bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->HealthBar && BlasterHUD->CharacterOverlay->DeathsAmount;
+	const bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay && BlasterHUD->CharacterOverlay->DeathsAmount;
 	if (bHUDValid)
 	{
 		const FString DeathsText = FString::Printf(TEXT("%d"), Deaths);
 		BlasterHUD->CharacterOverlay->DeathsAmount->SetText(FText::FromString(DeathsText));
+	}
+}
+
+void ABlasterPlayerController::SetHUDWeaponAmmo(int32 Ammo)
+{
+	BlasterHUD = BlasterHUD == nullptr ? Cast<ABlasterHUD>(GetHUD()) : BlasterHUD;
+
+	const bool bHUDValid = BlasterHUD && BlasterHUD->CharacterOverlay  && BlasterHUD->CharacterOverlay->WeaponAmmoAmount;
+	if (bHUDValid)
+	{
+		const FString AmmoText = FString::Printf(TEXT("%d"), Ammo);
+		BlasterHUD->CharacterOverlay->WeaponAmmoAmount->SetText(FText::FromString(AmmoText));
 	}
 }

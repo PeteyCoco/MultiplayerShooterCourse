@@ -7,8 +7,9 @@
 #include "Weapon.generated.h"
 
 
+class ABlasterCharacter;
+class ABlasterPlayerController;
 class ACasing;
-
 class USphereComponent;
 class UTexture2D;
 class UWidgetComponent;
@@ -31,12 +32,17 @@ class BLASTER_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	AWeapon();
-
+	//~ Begin AActor interface
+public:
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+	virtual void OnRep_Owner() override;
+protected:
+	virtual void BeginPlay() override;
+	//~ End AActor interface
+
+public:
+	AWeapon();
 
 	// Show or hide the pickup widget
 	void ShowPickupWidget(bool bShowWidget);
@@ -46,6 +52,9 @@ public:
 
 	// Logic executed when the weapon is dropped
 	void Dropped();
+
+	// Set ammo on the player hud
+	void SetHUDAmmo();
 
 	// Begin section: Textures for the weapon's crosshairs
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Crosshairs")
@@ -71,9 +80,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	bool bIsAutomatic = true;
 	// End section: Automatic fire
-
-protected:
-	virtual void BeginPlay() override;
 	
 	//~ Begin overlap callbacks
 	UFUNCTION()
@@ -144,6 +150,24 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Weapon Properties|Aiming")
 	float ZoomInterpSpeed = 20.f;
 	/*~ End aiming FOV section */
+
+	UPROPERTY(ReplicatedUsing = OnRep_Ammo, EditAnywhere, Category = "Weapon Properties")
+	int32 Ammo;
+
+	UFUNCTION()
+	void OnRep_Ammo();
+
+	UFUNCTION()
+	void SpendRound();
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+	int32 AmmoCapacity;
+
+	UPROPERTY()
+	ABlasterCharacter* BlasterOwnerCharacter;
+
+	UPROPERTY()
+	ABlasterPlayerController* BlasterOwnerController;
 
 public:
 	void SetWeaponState(EWeaponState State);

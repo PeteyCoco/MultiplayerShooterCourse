@@ -28,6 +28,7 @@ public:
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
 	void SetHUDDeaths(int Deaths);
+	void SetHUDWeaponAmmo(int32 Ammo);
 
 private:
 	UPROPERTY()
