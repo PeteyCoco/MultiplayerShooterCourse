@@ -17,6 +17,8 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	GENERATED_BODY()
 
 	//~ Begin APlayerController interface
+public:
+	virtual void OnPossess(APawn* InPawn) override;
 protected:
 	virtual void BeginPlay() override;
 	//~ End APlayerController interface

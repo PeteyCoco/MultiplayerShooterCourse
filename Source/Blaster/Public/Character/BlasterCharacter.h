@@ -80,6 +80,9 @@ public:
 	// Return true if this character has been eliminated
 	bool IsEliminated() const { return bIsEliminated; }
 
+	float GetHealth() const { return Health; }
+	float GetMaxHealth() const { return MaxHealth; }
+
 protected:
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
