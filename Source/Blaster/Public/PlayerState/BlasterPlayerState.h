@@ -20,13 +20,26 @@ class BLASTER_API ABlasterPlayerState : public APlayerState
 	//~ Begin APlayerState interface
 public:
 	virtual void OnRep_Score() override;
+	virtual void GetLifetimeReplicatedProps(TArray <FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End APlayerState interface
 
 public:
+	// Server-side statistics setters
 	void AddToScore(float Amount);
+	void AddToDeaths(int32 Amount);
 
 private:
+	// GameFramework references
+	UPROPERTY()
 	ABlasterCharacter* Character;
+
+	UPROPERTY()
 	ABlasterPlayerController* Controller;
+
+	// Deaths statistic
+	UPROPERTY(ReplicatedUsing = OnRep_Deaths)
+	int32 Deaths = 0;
+	UFUNCTION()
+	void OnRep_Deaths();
 	
 };

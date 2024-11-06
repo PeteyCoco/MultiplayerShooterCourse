@@ -163,7 +163,9 @@ private:
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
 	// GameFramework references
+	UPROPERTY()
 	ABlasterPlayerController* BlasterPlayerController;
+	UPROPERTY()
 	ABlasterPlayerState* BlasterPlayerState;
 
 	// Aim offsets

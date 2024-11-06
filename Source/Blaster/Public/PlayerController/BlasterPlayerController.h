@@ -27,7 +27,9 @@ public:
 	// HUD setters
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
+	void SetHUDDeaths(int Deaths);
 
 private:
+	UPROPERTY()
 	ABlasterHUD* BlasterHUD;
 };
