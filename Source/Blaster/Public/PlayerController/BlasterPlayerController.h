@@ -24,8 +24,9 @@ protected:
 	//~ End APlayerController interface
 
 public:
-
+	// HUD setters
 	void SetHUDHealth(float Health, float MaxHealth);
+	void SetHUDScore(float Score);
 
 private:
 	ABlasterHUD* BlasterHUD;

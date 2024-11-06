@@ -17,6 +17,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "PlayerController/BlasterPlayerController.h"
+#include "PlayerState/BlasterPlayerState.h"
 #include "TimerManager.h"
 #include "Weapon/Weapon.h"
 
@@ -106,6 +107,18 @@ void ABlasterCharacter::BeginPlay()
 	
 }
 
+void ABlasterCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	// Poll for GameFramwork classes since they may be unavailable on BeginPlay
+	PollInit();
+
+	// Update character properties
+	AimOffset(DeltaTime);
+	TurnInPlace(DeltaTime);
+	HideCharacterIfCameraClose();
+}
 void ABlasterCharacter::Jump()
 {
 	if (bIsCrouched)
@@ -118,14 +131,6 @@ void ABlasterCharacter::Jump()
 	}
 }
 
-void ABlasterCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	AimOffset(DeltaTime);
-	TurnInPlace(DeltaTime);
-	HideCharacterIfCameraClose();
-}
 
 void ABlasterCharacter::Move(const FInputActionValue& InputActionValue)
 {
@@ -307,6 +312,18 @@ void ABlasterCharacter::UpdateHUDHealth()
 	if (BlasterPlayerController)
 	{
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
+	}
+}
+
+void ABlasterCharacter::PollInit()
+{
+	if (BlasterPlayerState == nullptr)
+	{
+		BlasterPlayerState = GetPlayerState<ABlasterPlayerState>();
+		if (BlasterPlayerState)
+		{
+			BlasterPlayerState->AddToScore(0.f);
+		}
 	}
 }
 

@@ -10,6 +10,7 @@
 #include "BlasterCharacter.generated.h"
 
 class ABlasterPlayerController;
+class ABlasterPlayerState;
 class AWeapon;
 class UCameraComponent;
 class UCombatComponent;
@@ -138,6 +139,9 @@ protected:
 
 	void UpdateHUDHealth();
 
+	// Poll for any relevant classes and initialize HUD
+	void PollInit();
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -158,7 +162,9 @@ private:
 	UFUNCTION()
 	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
+	// GameFramework references
 	ABlasterPlayerController* BlasterPlayerController;
+	ABlasterPlayerState* BlasterPlayerState;
 
 	// Aim offsets
 	float AO_Yaw;
