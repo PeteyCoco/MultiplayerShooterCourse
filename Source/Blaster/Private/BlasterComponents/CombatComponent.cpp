@@ -26,7 +26,8 @@ void UCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Out
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UCombatComponent, EquippedWeapon);
-	DOREPLIFETIME(UCombatComponent, bIsAiming)
+	DOREPLIFETIME(UCombatComponent, bIsAiming);
+	DOREPLIFETIME_CONDITION(UCombatComponent, CarriedAmmo, COND_OwnerOnly);
 }
 
 void UCombatComponent::BeginPlay()
@@ -316,4 +317,9 @@ void UCombatComponent::UpdateCameraFOV(float DeltaTime)
 	{
 		Character->GetFollowCamera()->SetFieldOfView(CurrentFOV);
 	}
+}
+
+void UCombatComponent::OnRep_CarriedAmmo()
+{
+
 }

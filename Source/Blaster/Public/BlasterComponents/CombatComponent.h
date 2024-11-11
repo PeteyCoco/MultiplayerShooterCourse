@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "HUD/BlasterHUD.h"
 #include "Components/ActorComponent.h"
+#include "Weapon/WeaponTypes.h"
 #include "CombatComponent.generated.h"
 
 class ABlasterCharacter;
@@ -115,4 +116,13 @@ private:
 
 	// Targeting
 	FVector HitTarget;
+
+	// Carried ammo for the currently equipped weapon
+	UPROPERTY(ReplicatedUsing = OnRep_CarriedAmmo)
+	int32 CarriedAmmo;
+
+	UFUNCTION()
+	void OnRep_CarriedAmmo();
+
+	TMap<EWeaponType, int32> CarriedAmmoMap;
 };
