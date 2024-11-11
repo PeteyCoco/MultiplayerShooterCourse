@@ -37,6 +37,8 @@ public:
 	void FireButtonPressed(bool bInIsFireButtonPressed);
 	void Fire();
 
+	bool CanFire() const;
+
 protected:
 	// Aiming state functions
 	void SetAiming(bool bInIsAiming);
@@ -82,7 +84,7 @@ private:
 	// Fire button state and timer
 	bool bIsFireButtonPressed = false;
 	FTimerHandle FireTimer;
-	bool bCanFire = true;
+	bool bIsFiring = false;
 
 	// HUD crosshair properties
 	FHUDPackage HUDPackage;

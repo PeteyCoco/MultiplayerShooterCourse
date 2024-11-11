@@ -124,7 +124,7 @@ void AWeapon::OnRep_Ammo()
 
 void AWeapon::SpendRound()
 {
-	--Ammo;
+	Ammo = FMath::Clamp(Ammo - 1, 0, AmmoCapacity);
 	SetHUDAmmo();
 }
 
@@ -176,6 +176,16 @@ void AWeapon::Fire(const FVector& HitTarget)
 	PlayFiringAnimation();
 	SpawnCasing();
 	SpendRound();
+}
+
+bool AWeapon::CanFire() const
+{
+	return !IsEmpty();
+}
+
+bool AWeapon::IsEmpty() const
+{
+	return Ammo <= 0;
 }
 
 void AWeapon::Dropped()

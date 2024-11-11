@@ -50,6 +50,12 @@ public:
 	// Fire this weapon
 	virtual void Fire(const FVector& HitTarget);
 
+	// Check if this weapon can fire
+	bool CanFire() const;
+
+	// Check if this weapon is out of ammo
+	bool IsEmpty() const;
+
 	// Logic executed when the weapon is dropped
 	void Dropped();
 
