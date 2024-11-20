@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "HUD/BlasterHUD.h"
 #include "Components/ActorComponent.h"
+#include "Blaster/BlasterTypes/CombatState.h"
 #include "Weapon/WeaponTypes.h"
 #include "CombatComponent.generated.h"
 
@@ -56,6 +57,12 @@ protected:
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
 	UFUNCTION(Server, Reliable)
 	void ServerReload();
+	UFUNCTION()
+	void HandleReload();
+
+	// Called from animnotify to exit the reloading state
+	UFUNCTION(BlueprintCallable)
+	void FinishReloading();
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
@@ -135,4 +142,10 @@ private:
 	int32 StartingARAmmo = 30;
 
 	void InitializeCarriedAmmo();
+
+	UPROPERTY(ReplicatedUsing = OnRep_CombatState)
+	ECombatState CombatState = ECombatState::ECS_Unoccupied;
+
+	UFUNCTION()
+	void OnRep_CombatState();
 };

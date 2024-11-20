@@ -6,6 +6,7 @@
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Character.h"
 #include "Blaster/BlasterTypes/TurningInPlace.h"
+#include "Blaster/BlasterTypes/CombatState.h"
 #include "Interfaces/InteractWithCrosshairsInterface.h"
 #include "BlasterCharacter.generated.h"
 
@@ -87,6 +88,8 @@ public:
 	float GetHealth() const { return Health; }
 	float GetMaxHealth() const { return MaxHealth; }
 
+	ECombatState GetCombatState() const;
+
 protected:
 	//~ Begin Input section
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -156,7 +159,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Widgets", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UWidgetComponent> OverheadWidget;
 
-	UPROPERTY(VisibleAnywhere, Category = "Combat")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UCombatComponent> Combat;
 
 	// The currently overlapped weapon

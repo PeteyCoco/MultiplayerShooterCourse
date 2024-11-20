@@ -461,6 +461,11 @@ void ABlasterCharacter::Elim()
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinish, ElimTimerDelay);
 }
 
+ECombatState ABlasterCharacter::GetCombatState() const
+{
+	return Combat ? Combat->CombatState : ECombatState::ECS_MAX;
+}
+
 void ABlasterCharacter::MulticastElim_Implementation()
 {
 	if (BlasterPlayerController)
