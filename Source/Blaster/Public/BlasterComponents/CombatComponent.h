@@ -34,6 +34,9 @@ public:
 	/** Equips a weapon to the character */
 	void EquipWeapon(AWeapon* WeaponToEquip);
 
+	// Reload functions
+	void ReloadButtonPressed();
+
 	// Fire functions
 	void FireButtonPressed(bool bInIsFireButtonPressed);
 	void Fire();
@@ -51,6 +54,8 @@ protected:
 	void ServerFire(const FVector_NetQuantize& TraceHitTarget);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastFire(const FVector_NetQuantize& TraceHitTarget);
+	UFUNCTION(Server, Reliable)
+	void ServerReload();
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();

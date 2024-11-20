@@ -41,8 +41,11 @@ protected:
 	//~ End ACharacter interface
 
 public:
-	// Play the fire weapon montage
+	// Animation montage players
 	void PlayFireMontage(bool bAiming);
+	void PlayReloadMontage();
+	void PlayHitReactMontage();
+	void PlayElimMontage();
 
 	// Set the overlapping weapon
 	void SetOverlappingWeapon(AWeapon* Weapon);
@@ -109,6 +112,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> FireAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> ReloadAction;
 	 
 	// Input callback functions
 	void Move(const FInputActionValue& InputActionValue);
@@ -119,6 +125,7 @@ protected:
 	void AimButtonReleased(const FInputActionValue& InputActionValue);
 	void FireButtonPressed(const FInputActionValue& InputActionValue);
 	void FireButtonReleased(const FInputActionValue& InputActionValue);
+	void ReloadButtonPressed(const FInputActionValue& InputActionValue);
 	//~ End Input section
 
 	// Update the aim offset for a frame
@@ -129,9 +136,6 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerEquipButtonPressed();
-
-	void PlayHitReactMontage();
-	void PlayElimMontage();
 
 	// Callback to damage event
 	UFUNCTION()
@@ -176,8 +180,12 @@ private:
 
 	ETurningInPlace TurningInPlaceState;
 
+	// Animation Montages
 	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
 	UAnimMontage* FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
+	UAnimMontage* ReloadMontage; 
 
 	UPROPERTY(EditAnywhere, Category = "Combat | Animation")
 	UAnimMontage* HitReactMontage;
